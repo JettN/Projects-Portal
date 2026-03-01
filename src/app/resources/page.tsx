@@ -1,6 +1,6 @@
 import styles from "../../styles/resources.module.css";
 
-export default function ProjectsPage() {
+export default function ResourcesPage() {
   return (
     <main className={styles.container}>
       <h1 className={styles.title}>Projects</h1>
