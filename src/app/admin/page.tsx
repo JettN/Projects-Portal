@@ -15,9 +15,12 @@ export default function AdminPage() {
       CMS.init({
         config: {
           backend: {
-            name: 'github',
-            repo: 'JettN/Projects-Portal',
+            //name: 'github',
+            //repo: 'JettN/Projects-Portal',
+            //branch: 'main',
+            name: 'git-gateway', // Required for the proxy to intercept requests
             branch: 'main',
+            proxy_url: 'http://localhost:8081/api/v1' // Explicitly point to your proxy
           },
           local_backend: true,
           load_config_file: false,
