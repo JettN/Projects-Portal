@@ -1,0 +1,32 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.container {
+  text-align: center;
+  padding: 2rem;
+  background-color: #071A2F;
+  color: white;
+  font-family: 'Book Antiqua', Georgia, serif;
+}
+
+.card {
+  border: 1px solid white;
+  border-radius: 8px;
+  padding: 1rem;
+  background-color: white;
+  color: black;
+}
+
+.title {
+    color: #60A5FA
+}
+
+.page_title{
+    color:white
+}
