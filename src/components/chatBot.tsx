@@ -155,6 +155,43 @@ export default function HKNChatbot() {
               </button>
             </div>
           </div>
+
+          {/* Messages */}
+          <div className={styles.messages}>
+            {messages.map((msg) => (
+              <div key={msg.id} className={`${styles.msgRow} ${styles[msg.sender]}`}>
+                {msg.sender === "bot" && (
+                  <div className={styles.botAvatar}>
+                    <BotIcon size={14} />
+                  </div>
+                )}
+                <div className={`${styles.msgGroup} ${styles[msg.sender]} ${isExpanded ? styles.expanded : ""}`}>
+                  <div className={`${styles.bubble} ${styles[msg.sender]}`}>
+                    {msg.text}
+                  </div>
+                  <span className={styles.timestamp}>{formatTime(msg.timestamp)}</span>
+                </div>
+              </div>
+            ))}
+
+            {/* Typing indicator */}
+            {isTyping && (
+              <div className={styles.typingRow}>
+                <div className={styles.botAvatar}>
+                  <BotIcon size={14} />
+                </div>
+                <div className={styles.typingBubble}>
+                  <div className={styles.dot} />
+                  <div className={styles.dot} />
+                  <div className={styles.dot} />
+                </div>
+              </div>
+            )}
+
+            <div ref={messagesEndRef} />
+          </div>
+
+          
         </div>
       )}
     </>
