@@ -97,6 +97,28 @@ export default function HKNChatbot() {
           </svg>
         </button>
       )}
+
+      {/* Chat window */}
+      {isOpen && (
+        <div className={`${styles.window} ${isExpanded ? styles.expanded : ""}`}>
+
+          {/* Header */}
+          <div className={styles.header}>
+            <div className={styles.headerLeft}>
+              <div className={styles.avatar}>
+                <BotIcon size={18} />
+              </div>
+              <div>
+                <div className={styles.headerTitle}>HKN Online Assistant</div>
+                <div className={styles.statusRow}>
+                  <div className={styles.statusDot} />
+                  <span className={styles.statusText}>Online</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 }
