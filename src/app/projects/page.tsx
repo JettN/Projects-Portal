@@ -1,10 +1,11 @@
-import styles from "../../styles/projects.module.css";
+export default async function Projects() {
 
-export default function ProjectsPage() {
   return (
-    <main className={styles.container}>
-      <h1 className={styles.title}>Projects</h1>
-      <p>Project list goes here.</p>
-    </main>
+    <div>
+      <main style={{ padding: '2rem' }}>
+        <h1>Welcome to the Projects Portal</h1>
+        
+      </main>
+    </div>
   );
 }

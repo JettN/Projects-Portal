@@ -1,10 +1,5 @@
-import styles from "../../../styles/single.project.module.css";
+export default async function Entry() {
 
-interface Props {
-  params: { slug: string };
-}
-
-export default function SingleProjectPage({ params }: Props) {
   return (
     <main className={styles.page}>
 

@@ -1,0 +1,169 @@
+.page {
+  --background: #071a2f;
+
+  --text-header: #60a5fa;
+  --text-body-primary: #bfdbfee6;
+  --text-body-secondary: #fff;
+
+  --button-primary: #5f69a6;
+  --button-border: #ebebeb;
+  --button-primary-hover: #f2f2f2;
+
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 50px;
+  font-family: "Book Antiqua", Georgia, serif;
+  background-color: var(--background);
+}
+
+.heroContainer {
+    display: flex;
+    flex-direction: column;
+    row-gap: 50px;
+    align-items: center;
+    justify-content: center;
+    padding: 160px;
+    background-image: url('/hab_hdsi_conference3.png');
+    background-size: cover;
+    background-color: rgba(0, 0, 0, 0.5); /* black overlay with 30% opacity */
+    background-blend-mode: overlay;
+}
+
+.heroContainer .heading {
+    color: var(--text-body-secondary);
+    font-size: 72px;
+}
+
+.heroContainer .subheading {
+    color: var(--text-body-secondary);
+    font-size: 32px;
+}
+
+.sectionContainer {
+    display: flex;
+    flex-direction: column;
+    row-gap: 30px;
+    padding: 40px;
+}
+
+.sectionHeadingContainer {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+}
+
+.title {
+    color: var(--text-header);
+    font-size: 36px;
+}
+
+.subtitle {
+    color: var(--text-body-primary);
+    font-size: 20px;
+}
+
+.imageContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    column-gap: 80px;
+}
+
+.mapContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    column-gap: 80px;
+}
+
+.map {
+    border-style: solid;
+    border-color: var(--text-body-primary);
+    width: 400px;
+    height: 300px;
+}
+
+.projectsContainer {
+    display: flex;
+    flex-direction: column;
+    row-gap: 24px;
+}
+
+.project {
+    display: flex;
+    flex-direction: row;
+    column-gap: 24px;
+    padding: 24px;
+    border-style: solid;
+    border-color: var(--text-body-primary);
+    border-radius: 8px;
+}
+
+.project .projectDetailsContainer {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+}
+
+.project .projectTitle {
+    color: var(--text-body-primary);
+    font-size: 24px;
+}
+
+.project .projectDetails {
+    color: var(--text-body-secondary);
+    font-size: 16px;
+}
+
+.project .btn {
+    border: none;
+    border-radius: 8px;
+    background-color: var(--button-primary);
+    padding: 12px;
+    width: 150px;
+    font-size: 16px;
+    font-family: "Book Antiqua", Georgia, serif;
+    cursor: pointer;
+}
+
+.faqsContainer {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16px;
+}
+
+.faq {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+    padding: 16px;
+    border-style: solid;
+    border-color: var(--text-body-primary);
+    border-radius: 8px;
+}
+
+.faq .faqQues {
+    color: var(--text-body-primary);
+    font-size: 20px;
+}
+
+.faq .faqAns {
+    color: var(--text-body-secondary);
+    font-size: 16px;
+}
+
+.sponsorsContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    column-gap: 30px;
+}
+
+.sponsor {
+    border-style: solid;
+    border-color: var(--text-body-primary);
+    width: 150px;
+    height: 150px;
+}
