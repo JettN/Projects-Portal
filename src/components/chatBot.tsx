@@ -70,4 +70,33 @@ export default function HKNChatbot() {
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === "Enter") handleSend();
   };
+
+  const formatTime = (date: Date) =>
+    date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+
+  const BotIcon = ({ size = 18 }: { size?: number }) => (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="white">
+      <path d="M12 2C6.477 2 2 6.268 2 11.5c0 2.1.72 4.04 1.93 5.6L2.5 21l4.26-1.36A10.3 10.3 0 0012 21c5.523 0 10-4.268 10-9.5S17.523 2 12 2z" />
+    </svg>
+  );
+
+  return (
+    <>
+      {/* Floating trigger button */}
+      {!isOpen && (
+        <button
+          className={styles.floatBtn}
+          onClick={() => setIsOpen(true)}
+          aria-label="Open HKN Chatbot"
+        >
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+            <path
+              d="M12 2C6.477 2 2 6.268 2 11.5c0 2.1.72 4.04 1.93 5.6L2.5 21l4.26-1.36A10.3 10.3 0 0012 21c5.523 0 10-4.268 10-9.5S17.523 2 12 2z"
+              fill="white"
+            />
+          </svg>
+        </button>
+      )}
+    </>
+  );
 }
