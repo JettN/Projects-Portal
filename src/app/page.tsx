@@ -1,65 +1,43 @@
-import Image from "next/image";
-import styles from "../styles/home.module.css";
+// src/app/page.tsx
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+import Link from 'next/link';
 
-export default function Home() {
+// 1. Define the structure of your frontmatter
+interface ShowcaseFrontmatter {
+  winner_title: string;
+  winner_image: string;
+  winner_description: string;
+  body?: string; 
+}
+
+async function getShowcaseData() {
+  const filePath = path.join(process.cwd(), 'content/showcase/showcase.md');
+  const fileContent = fs.readFileSync(filePath, 'utf-8');
+  
+  // 2. Cast the frontmatter to your interface
+  const { data, content } = matter(fileContent);
+  const frontmatter = data as ShowcaseFrontmatter;
+  
+  return { ...frontmatter, body: content };
+}
+
+export default async function Home() {
+  const showcase = await getShowcaseData();
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <div>
+      <main style={{ padding: '2rem' }}>
+        <h1>Welcome to the Projects Portal</h1>
+        
+        {/* Displaying Showcase Data */}
+        <section style={{ marginTop: '2rem', padding: '1rem' }}>
+          <h2>{showcase.winner_title}</h2>
+          {showcase.winner_image && <img src={showcase.winner_image} alt="Winner" width="300" />}
+          <p>{showcase.winner_description}</p>
+          <div>{showcase.body}</div>
+        </section>
       </main>
     </div>
   );
