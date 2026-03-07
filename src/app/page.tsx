@@ -2,7 +2,7 @@ import styles from "../styles/home.module.css";
 import HeroSlideshow from "../components/HeroSlideshow";
 import FeaturedCarousel from "../components/FeaturedCarousel";
 
-export default function Home() {
+export default async function Home() {
   return (
     <div className={styles.page}>
       {/* Full-viewport image slideshow with page title and subtitle*/}
