@@ -1,65 +1,50 @@
-import Image from "next/image";
 import styles from "../styles/home.module.css";
+import HeroSlideshow from "../components/HeroSlideshow";
+import FeaturedCarousel from "../components/FeaturedCarousel";
 
 export default function Home() {
   return (
     <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>To get started, edit the page.tsx file.</h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+      {/* Full-viewport image slideshow with page title and subtitle*/}
+      <HeroSlideshow />
+
+      <main className={styles.mainContent}>
+        {/* What is HKN Projects? */}
+        <section className={styles.aboutSection}>
+          <h2 className={styles.sectionTitle}>What is HKN Projects?</h2>
+          <div className={styles.aboutGrid}>
+            {/* Image placeholder */}
+            <div className={styles.aboutImagePlaceholder} />
+
+            {/* Section text */}
+            <div className={styles.aboutTextWrapper}>
+              <h3 className={styles.aboutHeading}>
+                Hands-On Engineering Experience
+              </h3>
+              <p className={styles.aboutBody}>
+                Body text for your whole article or post. We&apos;ll put in some
+                lorem ipsum to show how a filled-out page might look:
+              </p>
+              <p className={styles.aboutBody}>
+                Excepteur efficient emerging, minim veniam anim aute carefully
+                curated Ginza conversation exquisite perfect nostrud nisi
+                intricate Content. Qui  international first-class nulla ut.
+                Punctual adipisicing, essential lovely queen tempor eiusmod
+                irure. Exclusive izakaya charming Scandinavian impeccable aute
+                quality of life soft power pariatur Melbourne occaecat
+                discerning. Qui wardrobe aliquip, et Porter destination Toto
+                remarkable officia Helsinki excepteur Basset hound. Zürich
+                sleepy perfect consectetur.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Featured Projects */}
+        <section className={styles.featuredSection}>
+          <h2 className={styles.sectionTitle}>Featured Projects</h2>
+          <FeaturedCarousel />
+        </section>
       </main>
     </div>
   );
