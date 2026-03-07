@@ -191,7 +191,29 @@ export default function HKNChatbot() {
             <div ref={messagesEndRef} />
           </div>
 
-          
+          {/* Input area */}
+          <div className={styles.inputArea}>
+            <input
+              ref={inputRef}
+              type="text"
+              className={styles.textInput}
+              value={inputValue}
+              onChange={(e) => setInputValue(e.target.value)}
+              onKeyDown={handleKeyDown}
+              placeholder="Ask about projects, resources, events, etc."
+            />
+            <button
+              className={`${styles.sendBtn} ${inputValue.trim() ? styles.active : styles.inactive}`}
+              onClick={handleSend}
+              disabled={!inputValue.trim()}
+              aria-label="Send message"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <line x1="22" y1="2" x2="11" y2="13" />
+                <polygon points="22 2 15 22 11 13 2 9 22 2" />
+              </svg>
+            </button>
+          </div>
         </div>
       )}
     </>
