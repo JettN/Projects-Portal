@@ -1,3 +1,4 @@
+import styles from "../../../styles/home.module.css";
 export default async function Entry() {
 
   return (
@@ -5,7 +6,7 @@ export default async function Entry() {
 
       {/* TITLE */}
       <section className={styles.titleSection}>
-        <h1>{params.slug}</h1>
+        {/*<h1>{params.slug}</h1>*/}
       </section>
 
       {/* PROJECT OVERVIEW */}
