@@ -1,54 +1,75 @@
-// src/app/projects/[slug]/page.tsx
-import fs from 'fs';
-import path from 'path';
-import matter from 'gray-matter';
-import { remark } from 'remark';
-import html from 'remark-html';
-
-interface ProjectData {
-  title: string;
-  body: string;
-  preview_image?: string;
-  team?: string[];
-  // Add other fields as defined in your config.yml
-}
-
-async function getProjectData(slug: string) {
-  const filePath = path.join(process.cwd(), 'content/projects', slug, 'index.md');
-  const fileContent = fs.readFileSync(filePath, 'utf-8');
-  
-  const { data, content } = matter(fileContent);
-  
-  // Convert Markdown body to HTML
-  const processedContent = await remark().use(html).process(content);
-  const contentHtml = processedContent.toString();
-  
-  return { ...data, body: contentHtml } as ProjectData;
-}
-
-export default async function ProjectDetailsPage({ 
-  params 
-}: { 
-  params: Promise<{ slug: string }> 
-}) {
-  const { slug } = await params; // Await the promise!
-  const project = await getProjectData(slug);
+export default async function Entry() {
 
   return (
-    <main style={{ padding: '2rem', maxWidth: '800px', margin: '0 auto' }}>
-      <h1>{project.title}</h1>
-      {project.preview_image && (
-        <img src={project.preview_image} alt={project.title} style={{ width: '100%', borderRadius: '8px' }} />
-      )}
-      
-      <div dangerouslySetInnerHTML={{ __html: project.body }} />
-      
-      {project.team && (
-        <div>
-          <h3>Team Members</h3>
-          <ul>{project.team.map((member, i) => <li key={i}>{member}</li>)}</ul>
+    <main className={styles.page}>
+
+      {/* TITLE */}
+      <section className={styles.titleSection}>
+        <h1>{params.slug}</h1>
+      </section>
+
+      {/* PROJECT OVERVIEW */}
+      <section>
+        <h2>Project Overview</h2>
+        <div
+          style={{
+            background: "#ddd",
+            height: "250px",
+            padding: "20px",
+          }}
+        >
+          Project overview text goes here.
         </div>
-      )}
+      </section>
+
+      {/* DOCUMENTATION CAROUSEL (static for now) */}
+      <section style={{ marginTop: "60px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "40px" }}>
+          
+          <button type="button">{"<"}</button>
+
+          <div style={{ display: "flex", gap: "20px" }}>
+            <div style={{ width: "200px", height: "200px", background: "#ccc" }}>
+              Documentation
+            </div>
+
+            <div style={{ width: "200px", height: "200px", background: "#ccc" }}>
+              Documentation
+            </div>
+
+            <div style={{ width: "200px", height: "200px", background: "#ccc" }}>
+              Documentation
+            </div>
+          </div>
+
+          <button type="button">{">"}</button>
+        </div>
+      </section>
+
+      {/* MEMBERS */}
+      <section style={{ marginTop: "80px" }}>
+        <h2>Project Members</h2>
+
+        <div style={{ display: "flex", gap: "40px" }}>
+          
+          <div
+            style={{
+              width: "300px",
+              height: "300px",
+              background: "#ddd",
+            }}
+          />
+
+          <div>
+            <p>Lead:</p>
+            <p>Name - Major - Class</p>
+            <p>Members:</p>
+            <p>Name - Major - Class</p>
+            <p>Name - Major - Class</p>
+            <p>Name - Major - Class</p>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }

@@ -1,0 +1,94 @@
+ .bodyBg {
+	background: #06182b;
+	color: #222;
+	font-family: sans-serif;
+	margin: 0;
+}
+
+ .headerBar {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: 1em 2em 0 2em;
+}
+
+ .logo {
+	height: 48px;
+}
+
+ .navLinks {
+}
+
+ .navLink {
+	color: #fff;
+	margin-right: 2em;
+	text-decoration: none;
+}
+
+ .navLinkActive {
+	color: #a5cdf7;
+}
+
+ .mainContent {
+	max-width: 900px;
+	margin: 2em auto;
+}
+
+ .resourcesSection {
+}
+
+ .resourcesTitle {
+	background: #a5cdf7;
+	text-align: center;
+	padding: 0.5em 0;
+	border-radius: 3px;
+}
+
+ .columns {
+	margin: 2em 0;
+	display: flex;
+	flex-direction: row;
+	justify-content: center;
+	align-items: flex-start;
+	gap: 3em;
+}
+
+ .linksColumn {
+	display: flex;
+	flex-direction: column;
+	gap: 2em;
+}
+
+ .resourceBox {
+	background: #d9d9d9;
+	width: 350px;
+	text-align: center;
+	border-radius: 3px;
+	padding: 1em 0;
+}
+
+ .contactAside {
+	background: #d9d9d9;
+	width: 250px;
+	text-align: center;
+	border-radius: 3px;
+	padding: 2em 0;
+	align-self: stretch;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+ .contactTitle {
+	color: #6ba6f7;
+	font-weight: bold;
+}
+
+ .contactDetails {
+	color: #6ba6f7;
+	margin-top: 1em;
+}
+
+ .resourceLabel {
+	color: #6ba6f7;
+}

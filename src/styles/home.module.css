@@ -1,141 +1,260 @@
+/* PAGE WRAPPER */
 .page {
-  --background: #fafafa;
-  --foreground: #fff;
-
-  --text-primary: #000;
-  --text-secondary: #666;
-
-  --button-primary-hover: #383838;
-  --button-secondary-hover: #f2f2f2;
-  --button-secondary-border: #ebebeb;
-
-  display: flex;
   min-height: 100vh;
+  background-color: #071a2f;
+  font-family: Georgia, serif;
+  color: rgba(191, 219, 254, 0.902);
+}
+
+/* HERO SLIDESHOW */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Individual image */
+.heroSlide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.4s ease-in-out;
+  background-size: cover;
+  background-position: center;
+}
+
+.heroSlideActive {
+  opacity: 1;
+}
+
+/* Dark tint over images */
+.heroTint {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(7, 26, 47, 0.7);
+  z-index: 1;
+}
+
+/* Centered title and subtitle */
+.heroContent {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-geist-sans);
-  background-color: var(--background);
-}
-
-.main {
-  display: flex;
-  min-height: 100vh;
-  width: 100%;
-  max-width: 800px;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: space-between;
-  background-color: var(--foreground);
-  padding: 120px 60px;
-}
-
-.intro {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  text-align: left;
-  gap: 24px;
-}
-
-.intro h1 {
-  max-width: 320px;
-  font-size: 40px;
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: -2.4px;
-  text-wrap: balance;
-  color: var(--text-primary);
-}
-
-.intro p {
-  max-width: 440px;
-  font-size: 18px;
-  line-height: 32px;
-  text-wrap: balance;
-  color: var(--text-secondary);
-}
-
-.intro a {
-  font-weight: 500;
-  color: var(--text-primary);
-}
-
-.ctas {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  max-width: 440px;
+  text-align: center;
+  padding: 0 24px;
   gap: 16px;
-  font-size: 14px;
 }
 
-.ctas a {
+.heroTitle {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
+  font-size: 96px;
+  font-weight: 800;
+  color: #ffffff;
+  margin: 0;
+}
+
+.heroSubtitle {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
+  font-size: 36px;
+  color: rgba(191, 219, 254, 0.82);
+}
+
+/* MAIN CONTENT WRAPPER */
+.mainContent {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 72px 48px 96px;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 80px;
+}
+
+/* Shared section-level heading */
+.sectionTitle {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
+  font-size: 32px;
+  font-weight: bold;
+  color: #60a5fa;
+  margin: 0 0 42px;
+  display: flex;
   align-items: center;
-  height: 40px;
-  padding: 0 16px;
-  border-radius: 128px;
-  border: 1px solid transparent;
-  transition: 0.2s;
+  gap: 18px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.sectionTitle::before,
+.sectionTitle::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background-color: #60a5fa;
+  border-radius: 1px;
+}
+
+/* ABOUT SECTION */
+.aboutSection {
+  width: 100%;
+}
+
+.aboutGrid {
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 52px;
+  align-items: start;
+}
+
+/* Image placeholder */
+.aboutImagePlaceholder {
+  width: 100%;
+  aspect-ratio: 1;
+  background-color: #b0bbc8;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+/* Text */
+.aboutTextWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.aboutHeading {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
+  font-size: 24px;
+  font-weight: bold;
+  color: #60a5fa;
+  margin: 0;
+}
+
+.aboutBody {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
+  font-size: 17px;
+  line-height: 1.85;
+  color: rgba(191, 219, 254, 0.902);
+  margin: 0;
+}
+
+/* FEATURED PROJECTS SECTION */
+.featuredSection {
+  width: 100%;
+}
+
+/* Carousel outer wrapper */
+.carouselWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 95%;
+  margin: 0 auto;
+}
+
+/* Carousel side buttons */
+.carouselBtn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: rgba(191, 219, 254, 0.5);
   cursor: pointer;
-  width: fit-content;
-  font-weight: 500;
+  padding: 0 8px;
+  transition: color 0.2s;
+  user-select: none;
 }
 
-a.primary {
-  background: var(--text-primary);
-  color: var(--background);
-  gap: 8px;
+.carouselBtn:hover {
+  color: #60a5fa;
 }
 
-a.secondary {
-  border-color: var(--button-secondary-border);
+.carouselChevron {
+  width: 50px;
+  height: 160px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 3.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  margin-top: 40px;
 }
 
-/* Enable hover only on non-touch devices */
-@media (hover: hover) and (pointer: fine) {
-  a.primary:hover {
-    background: var(--button-primary-hover);
-    border-color: transparent;
-  }
-
-  a.secondary:hover {
-    background: var(--button-secondary-hover);
-    border-color: transparent;
-  }
+/* Clips overflowing scaled cards without hiding the buttons */
+.carouselClip {
+  flex: 1;
+  overflow: hidden;
 }
 
-@media (max-width: 600px) {
-  .main {
-    padding: 48px 24px;
-  }
-
-  .intro {
-    gap: 16px;
-  }
-
-  .intro h1 {
-    font-size: 32px;
-    line-height: 40px;
-    letter-spacing: -1.92px;
-  }
+.carouselTrack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
 }
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    filter: invert();
-  }
+/* Base card */
+.carouselCard {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  background: #102b57;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  flex-shrink: 0;
+  cursor: pointer;
+}
 
-  .page {
-    --background: #000;
-    --foreground: #000;
+/* Side cards */
+.carouselCardSide {
+  width: 190px;
+  height: 234px;
+  opacity: 0.75;
+  margin-top: 40px;
+  font-size: 16px;
+}
 
-    --text-primary: #ededed;
-    --text-secondary: #999;
+.carouselCardSide:hover {
+  opacity: 0.9;
+}
 
-    --button-primary-hover: #ccc;
-    --button-secondary-hover: #1a1a1a;
-    --button-secondary-border: #1a1a1a;
-  }
+/* Center card */
+.carouselCardCenter {
+  width: 300px;
+  height: 370px;
+  opacity: 1;
+  border-color: #60a5fa;
+  box-shadow: 0 0 32px rgba(96, 165, 250, 0.22);
+  font-size: 26px;
+}
+
+/* Image placeholder */
+.cardImagePlaceholder {
+  width: 100%;
+  height: 77%;
+  flex-shrink: 0;
+  background-color: #b0bbc8;
+}
+
+/* Card text */
+.cardName {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
+  color: #60a5fa;
+  padding: 9% 0;
+  margin: 0;
+  text-align: center;
+}
+
+.cardNameCenter {
+  font-weight: bold;
 }
