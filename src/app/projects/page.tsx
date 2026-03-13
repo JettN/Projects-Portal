@@ -10,6 +10,8 @@ interface Project {
   team: string[];
   start_date: string;
   type: string;
+  status: 'active' | 'planned' | 'past';
+  keywords: string[];
   slug: string;
 }
 
@@ -42,6 +44,8 @@ async function getProjects(): Promise<Project[]> {
       team: data.team,
       start_date: data.start_date,
       type: data.type,
+      status: data.status,
+      keywords: data.keywords,
       slug: folder,
     };
   }).filter(Boolean) as Project[];
@@ -49,6 +53,8 @@ async function getProjects(): Promise<Project[]> {
 
 export default async function ProjectsPage() {
   const projects = await getProjects();
+  const activeProjects = projects.filter(p => p.status === 'active' || p.status === 'planned');
+  const pastProjects = projects.filter(p => p.status === 'past');
 
   return (
     <main className={styles.container}>
@@ -63,7 +69,7 @@ export default async function ProjectsPage() {
       <section className="current projects">
         <h2 className={styles.title}>Active and Planned Projects</h2>
         <ul className={styles.grid}>
-          {projects.map((project) => (
+          {activeProjects.map((project) => (
             <li key={project.slug}>
               <Link href={`/projects/${project.slug}`}>
                 <article className={styles.card}>
@@ -80,7 +86,7 @@ export default async function ProjectsPage() {
       <section className="past projects">
         <h2 className={styles.title}>Past Projects</h2>
         <ul className={styles.grid}>
-          {projects.map((project) => (
+          {pastProjects.map((project) => (
             <li key={project.slug}>
               <Link href={`/projects/${project.slug}`}>
                 <article className={styles.card}>
