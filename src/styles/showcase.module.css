@@ -10,35 +10,90 @@
   --button-primary-hover: #f2f2f2;
 
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
   align-items: center;
   justify-content: center;
-  padding: 50px;
   font-family: "Book Antiqua", Georgia, serif;
   background-color: var(--background);
 }
 
-.heroContainer {
-    display: flex;
-    flex-direction: column;
-    row-gap: 50px;
-    align-items: center;
-    justify-content: center;
-    padding: 160px;
-    background-image: url('/hab_hdsi_conference3.png');
-    background-size: cover;
-    background-color: rgba(0, 0, 0, 0.5); /* black overlay with 30% opacity */
-    background-blend-mode: overlay;
+/* HERO SLIDESHOW */
+.hero {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
 }
 
-.heroContainer .heading {
-    color: var(--text-body-secondary);
-    font-size: 72px;
+/* Individual image */
+.heroSlide {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  transition: opacity 1.4s ease-in-out;
+  background-size: cover;
+  background-position: center;
 }
 
-.heroContainer .subheading {
-    color: var(--text-body-secondary);
-    font-size: 32px;
+.heroSlideActive {
+  opacity: 1;
+}
+
+/* Dark tint over images */
+.heroTint {
+  position: absolute;
+  inset: 0;
+  background-color: rgba(7, 26, 47, 0.7);
+  z-index: 1;
+}
+
+/* Centered title and subtitle */
+.heroContent {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 0 24px;
+  row-gap: 60px;
+}
+
+.heroTitle {
+  font-family: "Book Antiqua", Georgia, serif;
+  font-size: 96px;
+  font-weight: 800;
+  color: var(--text-body-secondary);
+  margin: 0;
+}
+
+.heroSubtitle {
+  font-family: "Book Antiqua", Georgia, serif;
+  font-size: 36px;
+  color: var(--text-body-primary);
+}
+
+.countdown {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 80px;
+  font-weight: 700;
+  color: var(--text-body-secondary);
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+}
+
+/* MAIN CONTENT */
+.mainContent {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 72px 0px;
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
 }
 
 .sectionContainer {
@@ -51,26 +106,40 @@
 .sectionHeadingContainer {
     display: flex;
     flex-direction: column;
-    row-gap: 8px;
+    row-gap: 16px;
 }
 
 .title {
+    font-family: "Book Antiqua", Georgia, serif;
     color: var(--text-header);
     font-size: 36px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 18px;
+    text-align: center;
+}
+
+.title::before,
+.title::after {
+  content: "";
+  flex: 1;
+  height: 2px;
+  background-color: var(--text-header);
+  border-radius: 1px;
 }
 
 .subtitle {
+    font-family: "Book Antiqua", Georgia, serif;
     color: var(--text-body-primary);
     font-size: 20px;
 }
 
-.imageContainer {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    column-gap: 80px;
+.sectionHeadingContainer .subtitle {
+    font-style: italic;
 }
 
+/* MAP */
 .mapContainer {
     display: flex;
     flex-direction: row;
@@ -85,10 +154,11 @@
     height: 300px;
 }
 
+/* SHOWCASE PROJECTS */
 .projectsContainer {
     display: flex;
     flex-direction: column;
-    row-gap: 24px;
+    row-gap: 20px;
 }
 
 .project {
@@ -104,15 +174,18 @@
 .project .projectDetailsContainer {
     display: flex;
     flex-direction: column;
-    row-gap: 16px;
+    row-gap: 10px;
 }
 
 .project .projectTitle {
+    font-family: "Book Antiqua", Georgia, serif;
     color: var(--text-body-primary);
     font-size: 24px;
+    font-weight: 600;
 }
 
 .project .projectDetails {
+    font-family: "Book Antiqua", Georgia, serif;
     color: var(--text-body-secondary);
     font-size: 16px;
 }
@@ -122,12 +195,14 @@
     border-radius: 8px;
     background-color: var(--button-primary);
     padding: 12px;
+    margin-top: 10px;
     width: 150px;
     font-size: 16px;
     font-family: "Book Antiqua", Georgia, serif;
     cursor: pointer;
 }
 
+/* FAQ CONTENT */
 .faqsContainer {
     display: flex;
     flex-direction: column;
@@ -137,23 +212,65 @@
 .faq {
     display: flex;
     flex-direction: column;
-    row-gap: 8px;
+    row-gap: 10px;
     padding: 16px;
     border-style: solid;
     border-color: var(--text-body-primary);
     border-radius: 8px;
 }
 
+.faqHeader {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.arrow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-body-primary);
+}
+
+.arrowRotated {
+  transform: rotate(180deg);
+}
+
+/* The expanding container logic */
+.faqContent {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.3s ease-out, opacity 0.2s ease;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.faqContent.show {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  padding-bottom: 5px;
+}
+
 .faq .faqQues {
+    font-family: "Book Antiqua", Georgia, serif;
     color: var(--text-body-primary);
     font-size: 20px;
+    font-weight: 600;
 }
 
 .faq .faqAns {
+    font-family: "Book Antiqua", Georgia, serif;
     color: var(--text-body-secondary);
     font-size: 16px;
+    min-height: 0;
 }
 
+/* SPONSORS */
 .sponsorsContainer {
     display: flex;
     flex-direction: row;

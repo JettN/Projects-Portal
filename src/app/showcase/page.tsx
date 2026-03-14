@@ -1,35 +1,87 @@
 import Image from "next/image";
 import styles from "../../styles/showcase.module.css";
+import ShowcaseSlideshow from "../../components/ShowcaseSlideshow";
+import FAQSection from "../../components/FAQ";
 
-export default function ShowcasePage() {
+import fs from 'fs';
+import path from 'path';
+import matter from 'gray-matter';
+import Link from 'next/link';
+
+interface Showcase {
+  showcase_description: string;
+  winner_title: string;
+  winner_description: string;
+  winner_image: string;
+}
+
+async function getShowcaseData() {
+  const filePath = path.join(process.cwd(), 'content/showcase/showcase.md');
+  const fileContent = fs.readFileSync(filePath, 'utf-8');
+  const { data, content } = matter(fileContent);
+
+  return {
+    showcase_description: content,
+    winner_title: data.winner_title,
+    winner_description: data.winner_description,
+    winner_image: data.winner_image,
+  };
+}
+
+interface Project {
+  title: string;
+  description: string;
+  preview_image: string;
+  team: string[];
+  slug: string;
+}
+
+async function getProjects() {
+  const projectsDir = path.join(process.cwd(), 'content/projects');
+  const folders = fs.readdirSync(projectsDir);
+
+  return folders.map((folder) => {
+    const filePath = path.join(projectsDir, folder, 'index.md');
+    const fileContent = fs.readFileSync(filePath, 'utf-8');
+    const { data, content } = matter(fileContent);
+
+    return {
+      title: data.title,
+      description: content,
+      preview_image: data.preview_image,
+      team: data.team,
+      slug: folder,
+    };
+  });
+}
+
+export default async function ShowcasePage() {
+  const showcase = await getShowcaseData();
+  const projects = await getProjects();
+
   return (
     <div className={styles.page}>
-      <main className={styles.container}>
 
-        <div className={styles.heroContainer}>
-          <h1 className={styles.heading}>HKN Project Showcase</h1>
-          <p className={styles.subheading}>MM/DD/YYYY at [location]</p>
-          <h2 className={styles.heading}>DD:HH:MM:SS</h2>
-        </div>
+      <ShowcaseSlideshow />
+
+      <main className={styles.mainContent}>
 
         <div className={styles.sectionContainer}>
           <h3 className={styles.title}>What is Project Showcase?</h3>
-          <p className={styles.subtitle}>[Description of project showcase...]</p>
+          <p className={styles.subtitle}>{showcase.showcase_description}</p>
           <h4 className={styles.title}>Last Year&#39;s Winner</h4>
-          <p className={styles.subtitle}>[Description of last year&#39;s winner...]</p>
-          <div className={styles.imageContainer}>
-            <Image className={styles.image}
-              src="/hab_and_dev_team_photo.jpg"
-              alt="hab and dev team photo"
-              width={400}
-              height={300}
+          <div className={styles.project}>
+            <Image className={styles.image} 
+              src={showcase.winner_image} alt={showcase.winner_title}
+              width={250} height={180}
             />
-            <Image className={styles.image}
-              src="/hab_hdsi_conference1.png"
-              alt="hab hdsi conference 1"
-              width={400}
-              height={300}
-            />
+            <div className={styles.projectDetailsContainer}>
+              <h3 className={styles.projectTitle}>{showcase.winner_title}</h3>
+              <p className={styles.projectDetails}>{showcase.winner_description}</p>
+              <button className={styles.btn}>
+                View Details
+              </button>
+            </div>
           </div>
         </div>
 
@@ -50,53 +102,30 @@ export default function ShowcasePage() {
             <p className={styles.subtitle}>FYI: These are only HKN projects, but other individual projects will also be showcased.</p>
           </div>
           <div className={styles.projectsContainer}>
-            <div className={styles.project}>
-              <Image className={styles.image}
-                src="/hab_and_dev_team_photo.jpg"
-                alt="hab and dev team photo"
-                width={200}
-                height={160}
-              />
-              <div className={styles.projectDetailsContainer}>
-                <h3 className={styles.projectTitle}>Project Title</h3>
-                <p className={styles.projectDetails}>Short project description...</p>
-                <p className={styles.projectDetails}>Team Members: [name 1], [name 2], ...</p>
-                <button className={styles.btn}>more details</button>
-              </div>
-            </div>
-            <div className={styles.project}>
-              <Image className={styles.image}
-                src="/hab_and_dev_team_photo.jpg"
-                alt="hab and dev team photo"
-                width={200}
-                height={160}
-              />
-              <div className={styles.projectDetailsContainer}>
-                <h3 className={styles.projectTitle}>Project Title</h3>
-                <p className={styles.projectDetails}>Short project description...</p>
-                <p className={styles.projectDetails}>Team Members: [name 1], [name 2], ...</p>
-                <button className={styles.btn}>more details</button>
-              </div>
-            </div>
+            {projects.map((project) => (
+                <div key={project.slug} className={styles.project}>
+                  <Image className={styles.image} 
+                    src={project.preview_image} alt={project.title}
+                    width={200} height={140}
+                  />
+                  <div className={styles.projectDetailsContainer}>
+                    <h3 className={styles.projectTitle}>{project.title}</h3>
+                    <p className={styles.projectDetails}>{project.description}</p>
+                    <button className={styles.btn}>
+                      View Details
+                      <Link href={`/projects/${project.slug}`}></Link>
+                    </button>
+                  </div>
+                </div>
+              ))}
           </div>
         </div>
 
         <div className={styles.sectionContainer}>
           <h3 className={styles.title}>FAQs</h3>
-          <div className={styles.faqsContainer}>
-            <div className={styles.faq}>
-              <p className={styles.faqQues}>Question...?</p>
-              <p className={styles.faqAns}>Answer the frequently asked question in a simple sentence, a longish paragraph, or even in a list.</p>
-            </div>
-            <div className={styles.faq}>
-              <p className={styles.faqQues}>Question...?</p>
-              <p className={styles.faqAns}>Answer the frequently asked question in a simple sentence, a longish paragraph, or even in a list.</p>
-            </div>
-            <div className={styles.faq}>
-              <p className={styles.faqQues}>Question...?</p>
-              <p className={styles.faqAns}>Answer the frequently asked question in a simple sentence, a longish paragraph, or even in a list.</p>
-            </div>
-          </div>
+
+          <FAQSection />
+          
         </div>
 
          <div className={styles.sectionContainer}>
