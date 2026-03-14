@@ -1,0 +1,112 @@
+.page {
+  background-color: #0b1629;
+  color: #ffffff;
+  min-height: 100vh;
+  padding: 60px 20px;
+  font-family: sans-serif;
+}
+
+.container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.sectionTitle {
+  color: #4a90e2;
+  font-size: 1.2rem;
+  margin-bottom: 15px;
+}
+
+/* Project Overview */
+.overviewBox {
+  background-color: #d9d9d9;
+  height: 250px;
+  border-radius: 4px;
+  margin-bottom: 80px;
+}
+
+/* Carousel */
+.carouselWrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 30px;
+  margin-bottom: 100px;
+}
+
+.arrowBtn {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 3rem;
+  cursor: pointer;
+  padding: 0 20px;
+}
+
+.carouselTrack {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.card {
+  width: 160px;
+  height: 200px;
+  border: 1px solid #2d3748;
+  display: flex;
+  flex-direction: column;
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.activeCard {
+  width: 220px;
+  height: 280px;
+  border: 2px solid #4a90e2;
+  opacity: 1;
+  background: rgba(255, 255, 255, 0.03);
+  box-shadow: 0 0 15px rgba(74, 144, 226, 0.2);
+}
+
+.cardImage {
+  flex: 1;
+  background: #ccc;
+  margin: 15px;
+}
+
+.cardLabel {
+  text-align: center;
+  font-size: 0.8rem;
+  padding-bottom: 10px;
+  color: #4a90e2;
+}
+
+/* Members Section */
+.membersContent {
+  display: flex;
+  gap: 60px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.memberPhoto {
+  width: 350px;
+  height: 350px;
+  background-color: #d9d9d9;
+}
+
+.memberList {
+  text-align: center;
+  line-height: 1.8;
+}
+
+.memberList h3 {
+  margin: 20px 0 5px 0;
+  font-size: 1rem;
+  font-weight: normal;
+}
+
+.memberList p {
+  margin: 0;
+  color: #cbd5e0;
+}
