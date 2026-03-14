@@ -46,6 +46,14 @@
   padding: 1rem;
   background-color: white;
   color: black;
+  overflow: hidden;
+}
+
+.card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
 }
 
 .search_section {

@@ -59,7 +59,9 @@ export default function AdminPage() {
                 { label: "Team Members", name: "team", widget: "list" },
                 { label: "Project Start Date", name: "start_date", widget: "datetime" },
                 { label: "Project Type", name: "type", widget: "select", options: ["Computer Science", "Data Science", "Electrical", "Mechanical", "Other"] },
-                { label: "Preview Image", name: "preview_image", widget: "image", media_folder: "./",     public_folder: "./" }
+                { label: "Preview Image", name: "preview_image", widget: "image", media_folder: "./",     public_folder: "./" },
+                { label: "Status", name: "status", widget: "select", options: ["active", "planned", "past"]},
+                { label: "Keywords", name: "keywords", widget: "list"}
               ]
             }
           ],
