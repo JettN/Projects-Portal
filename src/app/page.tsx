@@ -14,6 +14,11 @@ interface HomeFrontmatter {
   featured_projects?: FeaturedProjectEntry[];
 }
 
+// Normalize project slugs by removing .md extension, /index suffix, and converting backslashes to forward slashes
+function normalizeProjectSlug(value: string): string {
+  return value.replace(/\/index$/i, "");
+}
+
 // Structure for individual project markdown files (only extracts necessary fields)
 interface ProjectFrontmatter {
   title?: string;
@@ -39,7 +44,8 @@ async function getFeaturedProjects(): Promise<FeaturedCarouselCard[]> {
   const rawFeaturedProjects = frontmatter.featured_projects ?? [];
   const featuredSlugs = rawFeaturedProjects
     .map((entry) => (typeof entry === "string" ? entry : entry.project))
-    .filter((slug): slug is string => Boolean(slug));
+    .filter((slug): slug is string => Boolean(slug))
+    .map((slug) => normalizeProjectSlug(slug));
 
   // For each featured project slug, read the corresponding markdown file to get
   // the title and preview image for the carousel card
