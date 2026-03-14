@@ -6,6 +6,7 @@ import styles from "../styles/home.module.css";
 
 // Horizontal distance (px) between the center of adjacent cards
 const STEP = 275;
+const TRANSITION_MS = 600;
 
 // Card data structure used by the carousel
 export interface FeaturedCarouselCard {
@@ -34,6 +35,7 @@ export default function FeaturedCarousel({ cards }: FeaturedCarouselProps) {
   const count = cards.length; // Number of cards in the carousel
   // Index of the currently centered card
   const [centerIdx, setCenterIdx] = useState(0);
+  const [centerLinkEnabled, setCenterLinkEnabled] = useState(true); // Whether center link is enabled
   // Track the previous center so we can suppress transitions on
   // cards that stay hidden between renders (avoiding wrap-around)
   const prevCenterIdxRef = useRef(centerIdx);
@@ -53,6 +55,29 @@ export default function FeaturedCarousel({ cards }: FeaturedCarouselProps) {
     }
   }, [centerIdx, count]);
 
+  // Re-enable center link after slide animation finishes.
+  useEffect(() => {
+    if (centerLinkEnabled) {
+      return;
+    }
+
+    const timer = setTimeout(() => {
+      setCenterLinkEnabled(true);
+    }, TRANSITION_MS);
+
+    return () => clearTimeout(timer);
+  }, [centerIdx, centerLinkEnabled]);
+
+  const goToIndex = (nextIdx: number) => {
+    if (count <= 0) return;
+    const normalizedNext = (nextIdx + count) % count;
+    if (normalizedNext === centerIdx) return;
+
+    // Lock link immediately while cards animate into their new positions.
+    setCenterLinkEnabled(false);
+    setCenterIdx(normalizedNext);
+  };
+
   // Placeholder when no featured projects are available
   if (count === 0) {
     return (
@@ -67,7 +92,7 @@ export default function FeaturedCarousel({ cards }: FeaturedCarouselProps) {
       {/* Left button */}
       <button
         className={styles.carouselBtn}
-        onClick={() => setCenterIdx((centerIdx - 1 + count) % count)}
+        onClick={() => goToIndex(centerIdx - 1)}
         aria-label="Previous"
         disabled={count <= 1}
       >
@@ -94,8 +119,8 @@ export default function FeaturedCarousel({ cards }: FeaturedCarouselProps) {
 
             // Clamp off-screen cards just outside the clip boundary.
             const tx = isVisible ? offset * STEP : Math.sign(offset) * STEP * 1.1;
-            // Side cards sit slightly lower, matching the original layout.
-            const ty = isCenter ? "-50%" : "calc(-50% + 40px)";
+            // Side cards sit slightly lower than center card.
+            const ty = isCenter ? "-50%" : "calc(-50% + 28px)";
 
             return (
               <div
@@ -122,25 +147,29 @@ export default function FeaturedCarousel({ cards }: FeaturedCarouselProps) {
                     href={`/projects/${card.slug}`}
                     className={styles.carouselCardLink}
                     aria-label={`View ${card.name}`}
+                    aria-disabled={!centerLinkEnabled}
+                    tabIndex={centerLinkEnabled ? 0 : -1}
+                    onClick={centerLinkEnabled ? undefined : (event) => event.preventDefault()}
+                    style={centerLinkEnabled ? undefined : { pointerEvents: "none" }}
                   >
                     {/* Card image */}
                     <img
                       src={card.image}
                       alt={card.name}
-                      className={styles.cardImagePlaceholder}
+                      className={styles.cardImage}
                     />
                     {/* Project Title */}
-                    <p className={`${styles.cardName}${isCenter ? ` ${styles.cardNameCenter}` : ""}`}>
+                    <p className={`${styles.cardName} ${styles.cardNameCenter}`}>
                       {card.name}
                     </p>
                   </Link>
                 ) : (
-                  <div className={styles.carouselCardLink} onClick={isVisible ? () => setCenterIdx(idx) : undefined}>
+                  <div className={styles.carouselCardLink} onClick={isVisible ? () => goToIndex(idx) : undefined}>
                     {/* Card image */}
                     <img
                       src={card.image}
                       alt={card.name}
-                      className={styles.cardImagePlaceholder}
+                      className={styles.cardImage}
                     />
                     {/* Project Title */}
                     <p className={styles.cardName}>
@@ -157,7 +186,7 @@ export default function FeaturedCarousel({ cards }: FeaturedCarouselProps) {
       {/* Right button */}
       <button
         className={styles.carouselBtn}
-        onClick={() => setCenterIdx((centerIdx + 1) % count)}
+        onClick={() => goToIndex(centerIdx + 1)}
         aria-label="Next"
         disabled={count <= 1}
       >
