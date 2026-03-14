@@ -1,76 +1,66 @@
-import styles from "../../../styles/home.module.css";
+import styles from "../../../styles/single.project.module.css";
 export default async function Entry() {
-
+  
   return (
     <main className={styles.page}>
+      <div className={styles.container}>
+        
+        <h1 style={{ textAlign: "center", marginBottom: "50px" }}>Project Name</h1>
 
-      {/* TITLE */}
-      <section className={styles.titleSection}>
-        {/*<h1>{params.slug}</h1>*/}
-      </section>
+        {/* PROJECT OVERVIEW */}
+        <section>
+          <h2 className={styles.sectionTitle}>Project Overview</h2>
+          <div className={styles.overviewBox} />
+        </section>
 
-      {/* PROJECT OVERVIEW */}
-      <section>
-        <h2>Project Overview</h2>
-        <div
-          style={{
-            background: "#ddd",
-            height: "250px",
-            padding: "20px",
-          }}
-        >
-          Project overview text goes here.
-        </div>
-      </section>
+        {/* DOCUMENTATION CAROUSEL */}
+        <section className={styles.carouselWrapper}>
+          <button className={styles.arrowBtn}>&lsaquo;</button>
 
-      {/* DOCUMENTATION CAROUSEL (static for now) */}
-      <section style={{ marginTop: "60px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "40px" }}>
-          
-          <button type="button">{"<"}</button>
-
-          <div style={{ display: "flex", gap: "20px" }}>
-            <div style={{ width: "200px", height: "200px", background: "#ccc" }}>
-              Documentation
+          <div className={styles.carouselTrack}>
+            {/* Left Card */}
+            <div className={styles.card}>
+              <div className={styles.cardImage} />
+              <p className={styles.cardLabel}>Documentation Name</p>
             </div>
 
-            <div style={{ width: "200px", height: "200px", background: "#ccc" }}>
-              Documentation
+            {/* Middle (Active) Card */}
+            <div className={`${styles.card} ${styles.activeCard}`}>
+              <div className={styles.cardImage} style={{ background: "#eee" }} />
+              <p className={styles.cardLabel} style={{ fontWeight: "bold" }}>
+                Documentation Name
+              </p>
             </div>
 
-            <div style={{ width: "200px", height: "200px", background: "#ccc" }}>
-              Documentation
+            {/* Right Card */}
+            <div className={styles.card}>
+              <div className={styles.cardImage} />
+              <p className={styles.cardLabel}>Documentation Name</p>
             </div>
           </div>
 
-          <button type="button">{">"}</button>
-        </div>
-      </section>
+          <button className={styles.arrowBtn}>&rsaquo;</button>
+        </section>
 
-      {/* MEMBERS */}
-      <section style={{ marginTop: "80px" }}>
-        <h2>Project Members</h2>
-
-        <div style={{ display: "flex", gap: "40px" }}>
-          
-          <div
-            style={{
-              width: "300px",
-              height: "300px",
-              background: "#ddd",
-            }}
-          />
-
-          <div>
-            <p>Lead:</p>
-            <p>Name - Major - Class</p>
-            <p>Members:</p>
-            <p>Name - Major - Class</p>
-            <p>Name - Major - Class</p>
-            <p>Name - Major - Class</p>
+        {/* MEMBERS */}
+        <section>
+          <h2 className={styles.sectionTitle}>Project Members</h2>
+          <div className={styles.membersContent}>
+            <div className={styles.memberPhoto} />
+            
+            <div className={styles.memberList}>
+              <h3>Lead:</h3>
+              <p>Name - Major - Class</p>
+              
+              <h3>Members:</h3>
+              <p>Name - Major - Class</p>
+              <p>Name - Major - Class</p>
+              <p>Name - Major - Class</p>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+
+      </div>
     </main>
   );
 }
