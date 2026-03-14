@@ -93,8 +93,11 @@ export default async function Home() {
         <section className={styles.aboutSection}>
           <h2 className={styles.sectionTitle}>What is HKN Projects?</h2>
           <div className={styles.aboutGrid}>
-            {/* Image placeholder */}
-            <div className={styles.aboutImagePlaceholder} />
+            {/* Image */}
+            <img
+              src="/hero_slideshow/hab_outreach_tour.png"
+              className={styles.aboutImage}
+            />
 
             {/* Section text */}
             <div className={styles.aboutTextWrapper}>
