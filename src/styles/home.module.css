@@ -181,6 +181,11 @@
   color: #60a5fa;
 }
 
+.carouselBtn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
 .carouselWrapper > .carouselBtn:first-child:hover {
   transform: translateY(25px) translateX(-4px);
 }
@@ -256,12 +261,13 @@
   pointer-events: none;
 }
 
-/* Image placeholder */
+/* Card image */
 .cardImagePlaceholder {
   width: 100%;
   height: 77%;
   flex-shrink: 0;
   background-color: #b0bbc8;
+  object-fit: cover;
 }
 
 /* Card text */
@@ -275,4 +281,29 @@
 
 .cardNameCenter {
   font-weight: bold;
+}
+
+/* Card link to individual project page*/
+.carouselCardLink {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  height: 100%;
+  text-decoration: none;
+  color: inherit;
+}
+
+.carouselCardLink:hover {
+  text-decoration: none;
+}
+
+/* Carousel has no featured projects */
+.carouselEmpty {
+  width: 100%;
+  text-align: center;
+  color: rgba(191, 219, 254, 0.82);
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  padding: 40px 0;
 }

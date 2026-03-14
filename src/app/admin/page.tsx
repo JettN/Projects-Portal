@@ -45,6 +45,34 @@ export default function AdminPage() {
               ]
             },
             {
+              name: "homepage",
+              label: "Home Page",
+              files: [
+                {
+                  file: "content/home/homepage.md",
+                  label: "Home Page Featured Carousel",
+                  name: "homepage",
+                  fields: [
+                    {
+                      label: "Featured Projects",
+                      name: "featured_projects",
+                      widget: "list",
+                      min: 5,
+                      field: {
+                        label: "Project",
+                        name: "project",
+                        widget: "relation",
+                        collection: "projects",
+                        search_fields: ["title"],
+                        value_field: "{{slug}}",
+                        display_fields: ["title"]
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
               name: "projects",
               label: "Projects",
               folder: "content/projects",
