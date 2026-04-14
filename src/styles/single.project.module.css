@@ -3,7 +3,7 @@
   color: #ffffff;
   min-height: 100vh;
   padding: 60px 20px;
-  font-family: sans-serif;
+  font-family: Georgia, serif;
 }
 
 .container {
@@ -12,6 +12,7 @@
 }
 
 .mainTitle {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
   text-align: center;
   margin-bottom: 60px;
   font-size: 2.5rem;
@@ -19,20 +20,27 @@
 }
 
 .sectionTitle {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
   color: #4a90e2;
-  font-size: 1.1rem;
+  font-size: 1.4rem;
+  font-weight: 600;
   text-transform: none;
   margin-bottom: 15px;
 }
 
 .overviewBox {
-  background-color: #d9d9d9;
-  color: #333;
-  min-height: 200px;
-  padding: 25px;
-  border-radius: 2px;
+  background: none;
+  color: #ffffff;
+  padding: 0 0 1rem;
   margin-bottom: 80px;
   white-space: pre-wrap;
+}
+
+.overviewBox p {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
+  margin: 0;
+  color: #ffffff;
+  line-height: 1.6;
 }
 
 .carouselWrapper {
@@ -123,6 +131,7 @@
 }
 
 .cardLabel {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
   text-align: center;
   font-size: 0.85rem;
   padding: 0 8px 12px;
@@ -151,12 +160,14 @@
 }
 
 .memberList h3 {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
   margin: 25px 0 5px 0;
   font-size: 1.1rem;
   font-weight: 500;
 }
 
 .memberList p {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
   color: #a0aec0;
   font-size: 1rem;
   margin: 4px 0;
