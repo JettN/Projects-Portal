@@ -53,7 +53,7 @@ async function getProjects(): Promise<Project[]> {
 
 export default async function ProjectsPage() {
   const projects = await getProjects();
-  const activeProjects = projects.filter(p => p.status === 'active' || p.status === 'planned');
+  const activeProjects = projects.filter(p => p.status === 'active');
   const pastProjects = projects.filter(p => p.status === 'past');
 
   return (
@@ -67,7 +67,7 @@ export default async function ProjectsPage() {
       </section>
 
       <section className="current projects">
-        <h2 className={styles.title}>Active and Planned Projects</h2>
+        <h2 className={styles.title}>Active Projects</h2>
         <ul className={styles.grid}>
           {activeProjects.map((project) => (
             <li key={project.slug}>
