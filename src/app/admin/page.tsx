@@ -87,6 +87,14 @@ export default function AdminPage() {
               ]
             },
             {
+              name: "resources",
+              label: "Resources",
+              fields : [
+                { label: "Link 1", name: "link-1", widget: "string" },
+                { label: "Link 2", name: "link-2", widget: "string" }
+              ]
+            },
+            {
               name: "projects",
               label: "Projects",
               folder: "content/projects",
