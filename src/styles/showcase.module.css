@@ -148,10 +148,55 @@
 }
 
 .map {
-    border-style: solid;
-    border-color: var(--text-body-primary);
+    border: 0;
     width: 400px;
     height: 300px;
+}
+
+.thumbnail {
+  cursor: pointer;
+  transition: transform 0.25s ease;
+}
+
+.thumbnail:hover {
+  transform: scale(1.03);
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.82);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  position: relative;
+  max-width: 90vw;
+  max-height: 90vh;
+}
+
+.expandedImage {
+  width: 100%;
+  max-width: 1100px;
+  height: auto;
+  max-height: 85vh;
+}
+
+.closeBtn {
+  position: absolute;
+  top: -18px;
+  right: -18px;
+  width: 42px;
+  height: 42px;
+  border: none;
+  border-radius: 50%;
+  font-size: 28px;
+  cursor: pointer;
+  color: black;
+  background: white;
 }
 
 /* SHOWCASE PROJECTS */

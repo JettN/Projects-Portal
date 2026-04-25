@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import styles from "../styles/showcase.module.css";
 
 // Set the event date and location here
-const TARGET_DATE = "2026-04-01T18:00:00";  // e.g. April 1, 2026 at 6:00 PM
-const LOCATION = "Henry Booker Room";
+const TARGET_DATE = "2026-05-22T12:00:00";  // change each year
+const LOCATION = "Price Center Ballroom West A";
 
 // Image slides
 const slides = [
@@ -96,7 +96,7 @@ export default function ShowcaseSlideshow() {
         </p>
         {/* Countdown Display */}
         <h2 className={styles.countdown}>
-          {format(timeLeft.days)}D:{format(timeLeft.hours)}H:{format(timeLeft.minutes)}M:{format(timeLeft.seconds)}S
+          {format(timeLeft.days)}d:{format(timeLeft.hours)}h:{format(timeLeft.minutes)}m:{format(timeLeft.seconds)}s
         </h2>
       </div>
     </section>
