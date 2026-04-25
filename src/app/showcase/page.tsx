@@ -2,6 +2,7 @@ import Image from "next/image";
 import styles from "../../styles/showcase.module.css";
 import ShowcaseSlideshow from "../../components/ShowcaseSlideshow";
 import FAQSection from "../../components/FAQ";
+import ExpandableImage from "../../components/ExpandableImage";
 
 import fs from 'fs';
 import path from 'path';
@@ -69,7 +70,7 @@ export default async function ShowcasePage() {
         <div className={styles.sectionContainer}>
           <h3 className={styles.title}>What is Project Showcase?</h3>
           <p className={styles.subtitle}>{showcase.showcase_description}</p>
-          <h4 className={styles.title}>Last Year&#39;s Winner</h4>
+          <h3 className={styles.title}>Last Year&#39;s Winner</h3>
           <div className={styles.project}>
             <Image className={styles.image} 
               src={showcase.winner_image} alt={showcase.winner_title}
@@ -83,16 +84,30 @@ export default async function ShowcasePage() {
               </button>
             </div>
           </div>
+          <p className={styles.subtitle}>{"VP's blurb about how many votes it got, etc."}</p>
         </div>
 
         <div className={styles.sectionContainer}>
           <div className={styles.sectionHeadingContainer}>
             <h3 className={styles.title}>Showcase Location</h3>
-            <p className={styles.subtitle}>[Specific location address]</p>
+            <p className={styles.subtitle}>Price Center Ballroom West A</p>
           </div>
           <div className={styles.mapContainer}>
-            <div className={styles.map}></div>
-            <div className={styles.map}></div>
+            <iframe
+              className={styles.map}
+              src="https://www.google.com/maps?q=UCSD%20Price%20Center%20West&output=embed"
+              width="100%"
+              height="350"
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+            <ExpandableImage 
+              src={"/PC_MasterFloorPlanLevel2.jpg"}
+              alt={"Price Center Master Floor Plan Level 2"}
+              width={400}
+              height={300} 
+            />
           </div>
         </div>
 
