@@ -71,6 +71,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
 }
 .botAvatar {
   width: 28px;
@@ -81,6 +82,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
 }
 .headerTitle {
   color: #fff;

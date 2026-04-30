@@ -11,12 +11,12 @@ interface Message {
 }
 
 const BOT_RESPONSE =
-  "Thanks for reaching out! I'm the HKN Online Assistant. I can help you learn about our projects, resources, events, and more. Currently, HKN at UCSD is working on several exciting engineering projects. Feel free to ask about our tutoring resources, upcoming events, or how to get involved with the chapter!";
+  "Thanks for reaching out! I'm Ramsey, the HKN Online Assistant. I can help you learn about our projects, resources, events, and more. Currently, HKN at UCSD is working on several exciting engineering projects. Feel free to ask about our tutoring resources, upcoming events, or how to get involved with the chapter!";
 
 const INITIAL_MESSAGE: Message = {
   id: 0,
   sender: "bot",
-  text: "Hello! I'm the HKN Chatbot. How can I help you learn about our projects today?",
+  text: "Hello! I'm Ramsey, the HKN Online Assistant. How can I help you learn about our projects today?",
   timestamp: new Date(),
 };
 
@@ -75,9 +75,13 @@ export default function HKNChatbot() {
     date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
   const BotIcon = ({ size = 18 }: { size?: number }) => (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="white">
-      <path d="M12 2C6.477 2 2 6.268 2 11.5c0 2.1.72 4.04 1.93 5.6L2.5 21l4.26-1.36A10.3 10.3 0 0012 21c5.523 0 10-4.268 10-9.5S17.523 2 12 2z" />
-    </svg>
+    <img
+      src="/ramsey2.png"
+      alt="Ramsey"
+      width={size}
+      height={size}
+      style={{ display: "block", width: "100%", height: "100%", objectFit: "cover" }}
+    />
   );
 
   return (
@@ -109,7 +113,7 @@ export default function HKNChatbot() {
                 <BotIcon size={18} />
               </div>
               <div>
-                <div className={styles.headerTitle}>HKN Online Assistant</div>
+                <div className={styles.headerTitle}>Ramsey</div>
                 <div className={styles.statusRow}>
                   <div className={styles.statusDot} />
                   <span className={styles.statusText}>Online</span>
