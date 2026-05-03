@@ -2,20 +2,12 @@
 index_knowledge_base.py
 =======================
 Run this script ONCE (or whenever content changes) to populate Pinecone.
-Each team member fills in their section, then we run this together.
 
 Install dependencies:
     pip install llama-index llama-index-vector-stores-pinecone
                 llama-index-readers-github llama-index-readers-google
-                llama-index-readers-web google-generativeai pinecone-client
-                python-dotenv
-
-Required .env file:
-    PINECONE_API_KEY=...
-    PINECONE_INDEX=hkn-chatbot
-    GEMINI_API_KEY=...          # used for embeddings
-    GITHUB_TOKEN=...            # Aman
-    GOOGLE_CREDENTIALS=credentials.json  # Annie, Lina, Akari
+                llama-index-readers-web llama-index-embeddings-google-genai
+                pinecone-client python-dotenv google-genai
 """
 
 import os
@@ -23,36 +15,33 @@ from dotenv import load_dotenv
 load_dotenv()
 
 from pinecone import Pinecone, ServerlessSpec
-from llama_index.core import VectorStoreIndex, StorageContext
+from llama_index.core import VectorStoreIndex, StorageContext, Settings
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 from llama_index.core.node_parser import SentenceSplitter
-import google.generativeai as genai
 
-# ── Embedding setup (Gemini) ──────────────────────────────────────────────────
-# Must match the model used in pinecone.ts on the Next.js side
+# ── Embedding setup (updated google-genai SDK) ────────────────────────────────
+from llama_index.embeddings.google_genai import GoogleGenAIEmbedding
 
-from llama_index.embeddings.gemini import GeminiEmbedding
-
-embed_model = GeminiEmbedding(
-    model_name="models/text-embedding-004",
+embed_model = GoogleGenAIEmbedding(
+    model_name="text-embedding-004",
     api_key=os.getenv("GEMINI_API_KEY"),
 )
 
-from llama_index.core import Settings
 Settings.embed_model = embed_model
-Settings.chunk_size = 512       # characters per chunk
-Settings.chunk_overlap = 50     # overlap between chunks for context continuity
+Settings.chunk_size = 512
+Settings.chunk_overlap = 50
 
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SECTION 1 — GitHub Markdown files (Aman)
-# Reads all .md files from content/projects in the Projects-Portal repo
 # ══════════════════════════════════════════════════════════════════════════════
 from llama_index.readers.github import GithubRepositoryReader, GithubClient
 
 github_docs = []
 try:
-    github_client = GithubClient(api_key=os.getenv("GITHUB_TOKEN"))
+    github_client = GithubClient(
+        github_token=os.getenv("GITHUB_TOKEN"),  # fixed: was api_key
+    )
     github_reader = GithubRepositoryReader(
         github_client=github_client,
         owner="JettN",
@@ -66,7 +55,7 @@ try:
             GithubRepositoryReader.FilterType.INCLUDE,
         ),
     )
-    github_docs = github_reader.load_data(branch="main")
+    github_docs = github_reader.load_data(branch="test-deployment")
     for doc in github_docs:
         doc.metadata["source"] = "github_cms"
     print(f"✅ GitHub: loaded {len(github_docs)} documents")
@@ -76,17 +65,20 @@ except Exception as e:
 
 # ══════════════════════════════════════════════════════════════════════════════
 # SECTION 2 — Google Drive folder PDFs (Annie & Lina)
-# Reads all files in the shared Drive folder (slides + reports)
+#
+# IMPORTANT: credentials.json must be a SERVICE ACCOUNT key, not an
+# OAuth client secret. See README for how to create one.
+# Also make sure you've shared the Drive folder with the service account email.
 # ══════════════════════════════════════════════════════════════════════════════
 from llama_index.readers.google import GoogleDriveReader
 
 drive_docs = []
 try:
     drive_reader = GoogleDriveReader(
-        credentials_path=os.getenv("GOOGLE_CREDENTIALS", "credentials.json")
+        service_account_key_path=os.getenv("GOOGLE_CREDENTIALS", "credentials.json"),
     )
     drive_docs = drive_reader.load_data(
-        folder_id="1PDatyNShA_8VNEtLxVxPyZGlqXH15CIo"
+        folder_id="1zf3JNZbrSKR1mnLBhirNdoJuncY99tOQ"
     )
     for doc in drive_docs:
         doc.metadata["source"] = "google_drive"
@@ -94,24 +86,6 @@ try:
 except Exception as e:
     print(f"❌ Drive folder: {e}")
 
-
-# ══════════════════════════════════════════════════════════════════════════════
-# SECTION 3 — Fall GBM 2023 PDF (Akari)
-# Single file from Drive — use file ID not folder ID
-# ══════════════════════════════════════════════════════════════════════════════
-gbm_docs = []
-try:
-    gbm_reader = GoogleDriveReader(
-        credentials_path=os.getenv("GOOGLE_CREDENTIALS", "credentials.json")
-    )
-    gbm_docs = gbm_reader.load_data(
-        file_ids=["1Bgis0L-ZLcfJz_GXFZiFWqJkqjNyA_jf"]
-    )
-    for doc in gbm_docs:
-        doc.metadata["source"] = "gbm_slides"
-    print(f"✅ GBM PDF: loaded {len(gbm_docs)} documents")
-except Exception as e:
-    print(f"❌ GBM PDF: {e}")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -137,7 +111,7 @@ except Exception as e:
 # COMBINE & INDEX
 # ══════════════════════════════════════════════════════════════════════════════
 
-all_docs = github_docs + drive_docs + gbm_docs + web_docs
+all_docs = github_docs + drive_docs + web_docs
 
 if not all_docs:
     print("\n❌ No documents loaded — check errors above. Aborting.")
@@ -150,11 +124,10 @@ print(f"\n📄 Total documents loaded: {len(all_docs)}")
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
 index_name = os.getenv("PINECONE_INDEX", "hkn-chatbot")
 
-# Create index if it doesn't exist yet
 if index_name not in [i.name for i in pc.list_indexes()]:
     pc.create_index(
         name=index_name,
-        dimension=768,          # text-embedding-004 produces 768-dim vectors
+        dimension=768,
         metric="cosine",
         spec=ServerlessSpec(cloud="aws", region="us-east-1"),
     )
@@ -183,13 +156,10 @@ print("Ramsey can now answer questions using this knowledge base.")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# QUICK TEST — verify retrieval is working before closing
+# QUICK TEST
 # ══════════════════════════════════════════════════════════════════════════════
 
 print("\n── Quick retrieval test ──")
-
-from llama_index.core import VectorStoreIndex
-from llama_index.vector_stores.pinecone import PineconeVectorStore
 
 test_store = PineconeVectorStore(pinecone_index=pinecone_index)
 test_index = VectorStoreIndex.from_vector_store(test_store)
@@ -197,6 +167,5 @@ query_engine = test_index.as_query_engine(similarity_top_k=3)
 
 test_query = "What projects does HKN work on?"
 response = query_engine.query(test_query)
-
 print(f"Query:    {test_query}")
 print(f"Response: {response}\n")
