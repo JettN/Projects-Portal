@@ -2,5 +2,11 @@
   command = "next build"
   publish = ".next"
 
+# Next.js adapter — required for API routes (/api/chat) to work on Netlify
 [[plugins]]
   package = "@netlify/plugin-nextjs"
+
+# Pinecone re-indexer — runs after every successful deploy
+# This fires whenever Decap CMS commits a new project to GitHub
+[[plugins]]
+  package = "./netlify/plugins/index-pinecone"
