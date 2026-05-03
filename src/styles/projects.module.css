@@ -32,7 +32,8 @@
 }
 
 .grid {
-  display: grid;
+  display: flex;
+  flex-wrap: wrap;
   grid-template-columns: repeat(3, 1fr);
   gap: 1.5rem;
   list-style: none;
@@ -41,17 +42,23 @@
 }
 
 .card {
+  flex: 0 0 360px;
+  width: 370px;
+  height: 290px;
   border: 1px solid white;
   border-radius: 8px;
   padding: 1rem;
   background-color: white;
   color: black;
   overflow: hidden;
+  display: flex;
+  flex-direction: column;
 }
 
 .card img {
     width: 100%;
-    height: 200px;
+    flex: 1;
+    min-height: 0;
     object-fit: cover;
     border-radius: 4px;
 }
