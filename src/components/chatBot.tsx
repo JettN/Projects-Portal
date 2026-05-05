@@ -1,7 +1,19 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 import styles from "../styles/chatbot.module.css";
+
+function BubbleContent({ sender, text }: { sender: "user" | "bot"; text: string }) {
+  if (sender === "user") {
+    return <>{text}</>;
+  }
+  return (
+    <div className={styles.mdRoot}>
+      <ReactMarkdown>{text}</ReactMarkdown>
+    </div>
+  );
+}
 
 interface Message {
   id: number;
@@ -212,7 +224,7 @@ export default function HKNChatbot() {
                 )}
                 <div className={`${styles.msgGroup} ${styles[msg.sender]} ${isExpanded ? styles.expanded : ""}`}>
                   <div className={`${styles.bubble} ${styles[msg.sender]}`}>
-                    {msg.text}
+                    <BubbleContent sender={msg.sender} text={msg.text} />
                   </div>
                   <span className={styles.timestamp}>{formatTime(msg.timestamp)}</span>
                 </div>
