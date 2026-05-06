@@ -3,9 +3,10 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/showcase.module.css";
 
-// Set the event date and location here
-const TARGET_DATE = "2026-05-22T12:00:00";  // change each year
-const LOCATION = "Price Center Ballroom West A";
+type ShowcaseSlideshowProps = {
+  date: string;
+  location: string;
+};
 
 // Image slides
 const slides = [
@@ -22,12 +23,15 @@ interface TimeLeft {
   seconds: number;
 }
 
-export default function ShowcaseSlideshow() {
+export default function ShowcaseSlideshow({
+  date, 
+  location,
+}: ShowcaseSlideshowProps) {
   // Index of the currently active slide
   const [current, setCurrent] = useState(0);
 
   // Date formatting
-  const eventDate = new Date(TARGET_DATE);  
+  const eventDate = new Date(date);  
   // Formats to "MM/DD/YYYY"
   const formattedDate = eventDate.toLocaleDateString("en-US", {
     month: "2-digit",
@@ -43,7 +47,7 @@ export default function ShowcaseSlideshow() {
 
   // Countdown calculation
   const calculateTimeLeft = (): TimeLeft => {
-    const difference = +new Date(TARGET_DATE) - +new Date();
+    const difference = +new Date(date) - +new Date();
     if (difference > 0) {
       return {
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
@@ -92,7 +96,7 @@ export default function ShowcaseSlideshow() {
       <div className={styles.heroContent}>
         <h1 className={styles.heroTitle}>HKN Project Showcase</h1>
         <p className={styles.heroSubtitle}>
-          {formattedDate} at {formattedTime} | {LOCATION}
+          {formattedDate} at {formattedTime} | {location}
         </p>
         {/* Countdown Display */}
         <h2 className={styles.countdown}>

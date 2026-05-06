@@ -12,7 +12,7 @@ interface ExpandableImage {
 }
 
 export default function ExpandableImage({
-  src = "url(/PC_MasterFloorPlanLevel2.jpg)",
+  src = "/PC_MasterFloorPlanLevel2.jpg",
   alt = "Price Center Master Floor Plan Level 2",
   width = 400,
   height = 300,
