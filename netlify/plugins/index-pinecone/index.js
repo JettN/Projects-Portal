@@ -107,7 +107,7 @@ module.exports = {
       // ── 3. Embed chunks using Gemini ─────────────────────────────────────────
 
       const genai = new GoogleGenerativeAI(GEMINI_API_KEY);
-      const embedModel = genai.getGenerativeModel({ model: "text-embedding-004" });
+      const embedModel = genai.getGenerativeModel({ model: "text-embedding-005" });
 
       const vectors = [];
       for (let i = 0; i < chunks.length; i++) {
