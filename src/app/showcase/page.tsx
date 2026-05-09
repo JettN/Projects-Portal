@@ -11,21 +11,25 @@ import Link from 'next/link';
 
 interface Showcase {
   showcase_description: string;
-  winner_title: string;
-  winner_description: string;
-  winner_image: string;
+  date: string;
+  location: string;
+  winner_blurb: string;
+  location_link: string;
+  location_image: string;
 }
 
 async function getShowcaseData() {
   const filePath = path.join(process.cwd(), 'content/showcase/showcase.md');
   const fileContent = fs.readFileSync(filePath, 'utf-8');
-  const { data, content } = matter(fileContent);
+  const { data } = matter(fileContent);
 
   return {
-    showcase_description: content,
-    winner_title: data.winner_title,
-    winner_description: data.winner_description,
-    winner_image: data.winner_image,
+    showcase_description: data.showcase_description,
+    date: data.date,
+    location: data.location,
+    winner_blurb: data.winner_blurb,
+    location_link: data.location_link,
+    location_image: data.location_image,
   };
 }
 
@@ -35,6 +39,8 @@ interface Project {
   preview_image: string;
   team: string[];
   slug: string;
+  status: 'active' | 'planned' | 'past';
+  winner_status: 'winner' | 'not winner';
 }
 
 async function getProjects() {
@@ -52,6 +58,8 @@ async function getProjects() {
       preview_image: data.preview_image,
       team: data.team,
       slug: folder,
+      status: data.status,
+      winner_status: data.winner_status,
     };
   });
 }
@@ -59,11 +67,16 @@ async function getProjects() {
 export default async function ShowcasePage() {
   const showcase = await getShowcaseData();
   const projects = await getProjects();
-
+  const activeProjects = projects.filter(p => p.status === 'active');
+  const winnerProject = projects.filter(p => p.winner_status === 'winner');
+  
   return (
     <div className={styles.page}>
 
-      <ShowcaseSlideshow />
+      <ShowcaseSlideshow 
+        date={showcase.date}
+        location={showcase.location}
+      />
 
       <main className={styles.mainContent}>
 
@@ -71,20 +84,23 @@ export default async function ShowcasePage() {
           <h3 className={styles.title}>What is Project Showcase?</h3>
           <p className={styles.subtitle}>{showcase.showcase_description}</p>
           <h3 className={styles.title}>Last Year&#39;s Winner</h3>
-          <div className={styles.project}>
-            <Image className={styles.image} 
-              src={showcase.winner_image} alt={showcase.winner_title}
-              width={250} height={180}
-            />
-            <div className={styles.projectDetailsContainer}>
-              <h3 className={styles.projectTitle}>{showcase.winner_title}</h3>
-              <p className={styles.projectDetails}>{showcase.winner_description}</p>
-              <button className={styles.btn}>
-                View Details
-              </button>
+          {winnerProject.map((project) => (
+            <div key={project.slug} className={styles.project}>
+              <Image className={styles.image} 
+                src={project.preview_image} alt={project.title}
+                width={200} height={140}
+              />
+              <div className={styles.projectDetailsContainer}>
+                <h3 className={styles.projectTitle}>{project.title}</h3>
+                <p className={styles.projectDetails}>{project.description}</p>
+                <button className={styles.btn}>
+                  View Details
+                  <Link href={`/projects/${project.slug}`}></Link>
+                </button>
+              </div>
             </div>
-          </div>
-          <p className={styles.subtitle}>{"VP's blurb about how many votes it got, etc."}</p>
+          ))}
+          <p className={styles.subtitle}>{showcase.winner_blurb}</p>
         </div>
 
         <div className={styles.sectionContainer}>
@@ -95,7 +111,7 @@ export default async function ShowcasePage() {
           <div className={styles.mapContainer}>
             <iframe
               className={styles.map}
-              src="https://www.google.com/maps?q=UCSD%20Price%20Center%20West&output=embed"
+              src={showcase.location_link}
               width="100%"
               height="350"
               allowFullScreen
@@ -104,7 +120,7 @@ export default async function ShowcasePage() {
             />
             <ExpandableImage 
               src={"/PC_MasterFloorPlanLevel2.jpg"}
-              alt={"Price Center Master Floor Plan Level 2"}
+              alt={"Showcase Location Image"}
               width={400}
               height={300} 
             />
@@ -117,22 +133,22 @@ export default async function ShowcasePage() {
             <p className={styles.subtitle}>FYI: These are only HKN projects, but other individual projects will also be showcased.</p>
           </div>
           <div className={styles.projectsContainer}>
-            {projects.map((project) => (
-                <div key={project.slug} className={styles.project}>
-                  <Image className={styles.image} 
-                    src={project.preview_image} alt={project.title}
-                    width={200} height={140}
-                  />
-                  <div className={styles.projectDetailsContainer}>
-                    <h3 className={styles.projectTitle}>{project.title}</h3>
-                    <p className={styles.projectDetails}>{project.description}</p>
-                    <button className={styles.btn}>
-                      View Details
-                      <Link href={`/projects/${project.slug}`}></Link>
-                    </button>
-                  </div>
+            {activeProjects.map((project) => (
+              <div key={project.slug} className={styles.project}>
+                <Image className={styles.image} 
+                  src={project.preview_image} alt={project.title}
+                  width={200} height={140}
+                />
+                <div className={styles.projectDetailsContainer}>
+                  <h3 className={styles.projectTitle}>{project.title}</h3>
+                  <p className={styles.projectDetails}>{project.description}</p>
+                  <button className={styles.btn}>
+                    View Details
+                    <Link href={`/projects/${project.slug}`}></Link>
+                  </button>
                 </div>
-              ))}
+              </div>
+            ))}
           </div>
         </div>
 
