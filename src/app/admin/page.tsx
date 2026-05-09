@@ -24,7 +24,7 @@ export default function AdminPage() {
           local_backend: false,
           load_config_file: false,
           media_folder: 'public/images',
-          public_folder: '',
+          public_folder: '/images',
           collections: [
             {
               name: "showcase",
@@ -100,7 +100,7 @@ export default function AdminPage() {
                 { label: "Team Members", name: "team", widget: "list" },
                 { label: "Project Start Date", name: "start_date", widget: "datetime" },
                 { label: "Project Type", name: "type", widget: "select", options: ["Computer Science", "Data Science", "Electrical", "Mechanical", "Other"] },
-                { label: "Preview Image", name: "preview_image", widget: "image", media_folder: "./",     public_folder: "./" },
+                { label: "Preview Image", name: "preview_image", widget: "image", media_folder: "/public/images/projects",     public_folder: "/images/projects" },
                 { label: "Status", name: "status", widget: "select", options: ["active", "past"]},
                 { label: "Status", name: "winner_status", widget: "select", options: ["winner", "not winner"]},
                 { label: "Keywords", name: "keywords", widget: "list"}
