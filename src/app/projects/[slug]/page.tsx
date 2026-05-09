@@ -69,9 +69,17 @@ export default async function Entry({
   const { data, content } = matter(fileContent);
   const frontmatter = data as ProjectFrontmatter;
   const testCards = triplicateCarouselCards(docCarouselCards(slug, frontmatter));
+  const backgroundImage = testCards[0]?.image;
 
   return (
     <main className={styles.page}>
+      {backgroundImage ? (
+        <div
+          className={styles.pageBackground}
+          style={{ backgroundImage: `url(${backgroundImage})` }}
+          aria-hidden="true"
+        />
+      ) : null}
       <div className={styles.container}>
         <h1 className={styles.mainTitle}>
           {frontmatter.title || "Project Name"}

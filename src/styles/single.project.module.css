@@ -4,11 +4,26 @@
   min-height: 100vh;
   padding: 60px 20px;
   font-family: Georgia, serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.pageBackground {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  opacity: 0.45;
+  pointer-events: none;
+  z-index: 0;
 }
 
 .container {
   max-width: 1000px;
   margin: 0 auto;
+  position: relative;
+  z-index: 1;
 }
 
 .mainTitle {

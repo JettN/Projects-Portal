@@ -35,12 +35,26 @@ export default function AdminPage() {
                   label: "Project Showcase",
                   name: "showcase",
                   fields: [
-                    { label: "Showcase Description", name: "body", widget: "markdown" },
-                    { label: "Winning Project Title", name: "winner_title", widget: "string" },
-                    { label: "Winning Project Image", name: "winner_image", widget: "image" },
-                    { label: "Winning Project Description", name: "winner_description", widget: "text" }
+                    { label: "Showcase Description", name: "showcase_description", widget: "text" },
+                    { label: "Showcase Date (YYYY-MM-DDThh:mm:ss)", name: "date", widget: "string" },
+                    { label: "Showcase Location", name: "location", widget: "string" },
+                    { label: "Winner Blurb", name: "winner_blurb", widget: "text" },
+                    { label: "Location Google Map Embed Link", name: "location_link", widget: "string" },
+                    { label: "Location Image", name: "location_image", widget: "image" },
+                    {
+                      label: "FAQs", name: "faqs", widget: "list", min: 3,
+                      fields: [
+                        { label: "Question", name: "question", widget: "string" },
+                        { label: "Answer", name: "answer", widget: "string" },
+                      ]
+                    },
+                    {
+                      label: "Sponsors", name: "sponsors", widget: "list",
+                      field: { label: "Sponsor Logo", name: "logo", widget: "image" }
+                    }
                   ]
                 }
+                
               ]
             },
             {
@@ -88,6 +102,7 @@ export default function AdminPage() {
                 { label: "Project Type", name: "type", widget: "select", options: ["Computer Science", "Data Science", "Electrical", "Mechanical", "Other"] },
                 { label: "Preview Image", name: "preview_image", widget: "image", media_folder: "./",     public_folder: "./" },
                 { label: "Status", name: "status", widget: "select", options: ["active", "past"]},
+                { label: "Status", name: "winner_status", widget: "select", options: ["winner", "not winner"]},
                 { label: "Keywords", name: "keywords", widget: "list"}
               ]
             }
