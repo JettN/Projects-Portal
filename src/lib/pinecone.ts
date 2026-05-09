@@ -7,7 +7,7 @@ const pinecone = new Pinecone({
   apiKey: process.env.PINECONE_API_KEY!,
 });
 
-const INDEX_NAME = process.env.PINECONE_INDEX ?? "hkn-chatbot";
+const INDEX_NAME = process.env.PINECONE_INDEX;
 
 // We use Gemini's embedding model to turn the user's query into a vector.
 // This MUST be the same model used when indexing — both use "embedding-001"

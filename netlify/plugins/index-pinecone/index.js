@@ -22,7 +22,7 @@ module.exports = {
       // ── Config ──────────────────────────────────────────────────────────────
 
       const PINECONE_API_KEY = process.env.PINECONE_API_KEY;
-      const PINECONE_INDEX   = process.env.PINECONE_INDEX ?? "hkn-chatbot";
+      const PINECONE_INDEX   = process.env.PINECONE_INDEX;
       const GEMINI_API_KEY   = process.env.GEMINI_API_KEY;
       const GITHUB_TOKEN     = process.env.GITHUB_TOKEN;
       const REPO_OWNER       = "JettN";

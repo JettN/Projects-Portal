@@ -122,7 +122,7 @@ print(f"\n📄 Total documents loaded: {len(all_docs)}")
 # ── Connect to Pinecone ───────────────────────────────────────────────────────
 
 pc = Pinecone(api_key=os.getenv("PINECONE_API_KEY"))
-index_name = os.getenv("PINECONE_INDEX", "hkn-chatbot")
+index_name = os.getenv("PINECONE_INDEX")
 
 if index_name not in [i.name for i in pc.list_indexes()]:
     pc.create_index(
