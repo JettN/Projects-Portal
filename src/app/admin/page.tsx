@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Script from 'next/script'
+
 
 export default function AdminPage() {
   const isInitialized = useRef(false);
@@ -156,6 +158,7 @@ export default function AdminPage() {
 
   return (
     <>
+      <Script src="https://identity.netlify.com/v1/netlify-identity-widget.js" />
       <style jsx global>{`
         /* Hides error overlays */
         .nextjs-error-overlay, 
