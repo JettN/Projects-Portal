@@ -1,6 +1,6 @@
 ---
 featured_projects:
-  - test-project/index
+  - thermoacoustic-refrigerator-tar/index
   - test-2/index
   - test-project/index
   - test-2/index
