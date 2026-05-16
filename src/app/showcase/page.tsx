@@ -9,6 +9,15 @@ import path from 'path';
 import matter from 'gray-matter';
 import Link from 'next/link';
 
+interface FAQ {
+  question: string;
+  answer: string;
+}
+
+interface Sponsor {
+  logo: string;
+}
+
 interface Showcase {
   showcase_description: string;
   date: string;
@@ -16,6 +25,8 @@ interface Showcase {
   winner_blurb: string;
   location_link: string;
   location_image: string;
+  faqs: FAQ[];
+  sponsors: Sponsor[];
 }
 
 async function getShowcaseData() {
@@ -30,6 +41,8 @@ async function getShowcaseData() {
     winner_blurb: data.winner_blurb,
     location_link: data.location_link,
     location_image: data.location_image,
+    faqs: data.faqs || [],
+    sponsors: data.sponsors || [],
   };
 }
 
@@ -119,7 +132,7 @@ export default async function ShowcasePage() {
               referrerPolicy="no-referrer-when-downgrade"
             />
             <ExpandableImage 
-              src={"/PC_MasterFloorPlanLevel2.jpg"}
+              src={showcase.location_image}
               alt={"Showcase Location Image"}
               width={400}
               height={300} 
@@ -142,10 +155,9 @@ export default async function ShowcasePage() {
                 <div className={styles.projectDetailsContainer}>
                   <h3 className={styles.projectTitle}>{project.title}</h3>
                   <p className={styles.projectDetails}>{project.description}</p>
-                  <button className={styles.btn}>
-                    View Details
-                    <Link href={`/projects/${project.slug}`}></Link>
-                  </button>
+                  <Link href={`/projects/${project.slug}`}>
+                    <button className={styles.btn}>View Details</button>
+                  </Link>
                 </div>
               </div>
             ))}
@@ -155,15 +167,13 @@ export default async function ShowcasePage() {
         <div className={styles.sectionContainer}>
           <h3 className={styles.title}>FAQs</h3>
 
-          <FAQSection />
+          <FAQSection faqs={showcase.faqs} />
           
         </div>
 
          <div className={styles.sectionContainer}>
           <h3 className={styles.title}>Past Sponsors</h3>
           <div className={styles.sponsorsContainer}>
-            <div className={styles.sponsor}></div>
-            <div className={styles.sponsor}></div>
             <div className={styles.sponsor}></div>
             <div className={styles.sponsor}></div>
             <div className={styles.sponsor}></div>

@@ -38,21 +38,21 @@ const FAQItem = ({ question, answer }: { question: string; answer: string }) => 
   );
 };
 
-export default function FAQSection() {
+interface FAQ {
+  question: string;
+  answer: string;
+}
+
+export default function FAQSection( {faqs}: {faqs: FAQ[]} ) {
   return (
     <div className={styles.faqsContainer}>
-        <FAQItem 
-          question="Question...?" 
-          answer="Answer the frequently asked question in a simple sentence, a longish paragraph, or even in a list." 
+       {faqs.map((faq, index) => (
+        <FAQItem
+          key={index}
+          question={faq.question}
+          answer={faq.answer}
         />
-        <FAQItem 
-          question="Question...?" 
-          answer="Answer the frequently asked question in a simple sentence, a longish paragraph, or even in a list." 
-        />
-        <FAQItem 
-          question="Question...?" 
-          answer="Answer the frequently asked question in a simple sentence, a longish paragraph, or even in a list." 
-        />
-      </div>
+      ))}
+    </div>
   );
 }

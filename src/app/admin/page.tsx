@@ -41,7 +41,7 @@ export default function AdminPage() {
                     { label: "Showcase Location", name: "location", widget: "string" },
                     { label: "Winner Blurb", name: "winner_blurb", widget: "text" },
                     { label: "Location Google Map Embed Link", name: "location_link", widget: "string" },
-                    { label: "Location Image", name: "location_image", widget: "image" },
+                    { label: "Location Image", name: "location_image", widget: "image", public_folder: "/",},
                     {
                       label: "FAQs", name: "faqs", widget: "list", min: 3,
                       fields: [
