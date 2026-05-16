@@ -156,6 +156,11 @@ module.exports = {
       const BATCH_SIZE = 100;
       for (let i = 0; i < vectors.length; i += BATCH_SIZE) {
         const batch = vectors.slice(i, i + BATCH_SIZE);
+        console.log(`[pinecone-plugin] Upserting batch of ${batch.length}, first id: ${batch[0]?.id}, values length: ${batch[0]?.values?.length}`);
+        if (batch.length === 0) {
+          console.log(`[pinecone-plugin] Empty batch, skipping`);
+          continue;
+        }
         await index.upsert(batch);
       }
 
