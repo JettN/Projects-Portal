@@ -5,25 +5,26 @@ Run this script ONCE (or whenever content changes) to populate Pinecone.
 
 Install dependencies:
     pip install llama-index llama-index-vector-stores-pinecone
-                llama-index-readers-github llama-index-readers-google
-                llama-index-readers-web llama-index-embeddings-google-genai
-                pinecone-client python-dotenv google-genai
+                llama-index-embeddings-google-genai
+                pinecone-client python-dotenv google-genai requests
 """
 
 import os
+import base64
+import requests
 from dotenv import load_dotenv
 load_dotenv()
 
 from pinecone import Pinecone, ServerlessSpec
-from llama_index.core import VectorStoreIndex, StorageContext, Settings
+from llama_index.core import VectorStoreIndex, StorageContext, Settings, Document
 from llama_index.vector_stores.pinecone import PineconeVectorStore
 from llama_index.core.node_parser import SentenceSplitter
 
-# ── Embedding setup (updated google-genai SDK) ────────────────────────────────
+# ── Embedding setup ───────────────────────────────────────────────────────────
 from llama_index.embeddings.google_genai import GoogleGenAIEmbedding
 
 embed_model = GoogleGenAIEmbedding(
-    model_name="text-embedding-004",
+    model_name="gemini-embedding-2",
     api_key=os.getenv("GEMINI_API_KEY"),
 )
 
@@ -33,68 +34,68 @@ Settings.chunk_overlap = 50
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 1 — GitHub Markdown files (Aman)
+# SECTION 1 — GitHub Markdown files (direct API, no llama_index reader)
 # ══════════════════════════════════════════════════════════════════════════════
-from llama_index.readers.github import GithubRepositoryReader, GithubClient
 
 github_docs = []
 try:
-    github_client = GithubClient(
-        github_token=os.getenv("GITHUB_TOKEN"),  # fixed: was api_key
+    GITHUB_TOKEN = os.getenv("GITHUB_TOKEN")
+    REPO_OWNER   = "JettN"
+    REPO_NAME    = "Projects-Portal"
+    CONTENT_PATH = "content/projects"
+    BRANCH       = "main"
+
+    headers = {"Authorization": f"token {GITHUB_TOKEN}"}
+
+    # List project folders
+    r = requests.get(
+        f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{CONTENT_PATH}?ref={BRANCH}",
+        headers=headers,
     )
-    github_reader = GithubRepositoryReader(
-        github_client=github_client,
-        owner="JettN",
-        repo="Projects-Portal",
-        filter_directories=(
-            ["content/projects"],
-            GithubRepositoryReader.FilterType.INCLUDE,
-        ),
-        filter_file_extensions=(
-            [".md"],
-            GithubRepositoryReader.FilterType.INCLUDE,
-        ),
-    )
-    github_docs = github_reader.load_data(branch="test-deployment")
-    for doc in github_docs:
-        doc.metadata["source"] = "github_cms"
+    r.raise_for_status()
+    folders = r.json()
+
+    for folder in folders:
+        if folder["type"] != "dir":
+            continue
+        try:
+            fr = requests.get(
+                f"https://api.github.com/repos/{REPO_OWNER}/{REPO_NAME}/contents/{CONTENT_PATH}/{folder['name']}/index.md?ref={BRANCH}",
+                headers=headers,
+            )
+            fr.raise_for_status()
+            file_data = fr.json()
+            text = base64.b64decode(file_data["content"]).decode("utf-8")
+            doc = Document(
+                text=text,
+                metadata={
+                    "source": "github_cms",
+                    "project": folder["name"],
+                    "path": file_data["path"],
+                },
+            )
+            github_docs.append(doc)
+        except Exception as e:
+            print(f"  ⚠ Skipped {folder['name']}: {e}")
+
     print(f"✅ GitHub: loaded {len(github_docs)} documents")
 except Exception as e:
     print(f"❌ GitHub: {e}")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 2 — Google Drive folder PDFs (Annie & Lina)
-#
-# IMPORTANT: credentials.json must be a SERVICE ACCOUNT key, not an
-# OAuth client secret. See README for how to create one.
-# Also make sure you've shared the Drive folder with the service account email.
+# SECTION 2 — Google Drive (disabled — requires service account credentials)
 # ══════════════════════════════════════════════════════════════════════════════
-from llama_index.readers.google import GoogleDriveReader
-
 drive_docs = []
-try:
-    drive_reader = GoogleDriveReader(
-        service_account_key_path=os.getenv("GOOGLE_CREDENTIALS", "credentials.json"),
-    )
-    drive_docs = drive_reader.load_data(
-        folder_id="1zf3JNZbrSKR1mnLBhirNdoJuncY99tOQ"
-    )
-    for doc in drive_docs:
-        doc.metadata["source"] = "google_drive"
-    print(f"✅ Drive folder: loaded {len(drive_docs)} documents")
-except Exception as e:
-    print(f"❌ Drive folder: {e}")
-
+print("⚠ Google Drive: skipped (disabled)")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 4 — Organisation websites (Saravanan & Benny)
+# SECTION 3 — Organisation websites
 # ══════════════════════════════════════════════════════════════════════════════
-from llama_index.readers.web import SimpleWebPageReader
-
 web_docs = []
 try:
+    from llama_index.readers.web import SimpleWebPageReader
     web_reader = SimpleWebPageReader(html_to_text=True)
     web_docs = web_reader.load_data(urls=[
         "https://hknucsd.com/",
@@ -104,7 +105,7 @@ try:
         doc.metadata["source"] = "website"
     print(f"✅ Websites: loaded {len(web_docs)} documents")
 except Exception as e:
-    print(f"❌ Websites: {e}")
+    print(f"⚠ Websites: skipped ({e})")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -127,7 +128,7 @@ index_name = os.getenv("PINECONE_INDEX")
 if index_name not in [i.name for i in pc.list_indexes()]:
     pc.create_index(
         name=index_name,
-        dimension=768,
+        dimension=3072,
         metric="cosine",
         spec=ServerlessSpec(cloud="aws", region="us-east-1"),
     )
@@ -152,7 +153,7 @@ VectorStoreIndex.from_documents(
 )
 
 print(f"\n🎉 Done! {len(all_docs)} documents indexed into '{index_name}'")
-print("Ramsey can now answer questions using this knowledge base.")
+print("The chatbot can now answer questions using this knowledge base.")
 
 
 # ══════════════════════════════════════════════════════════════════════════════

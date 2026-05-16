@@ -136,7 +136,7 @@ module.exports = {
 
         vectors.push({
           id:       `cms-${chunk.metadata.project}-${i}`,
-          values,
+          values:   Array.from(values).map(Number),  // ensure plain JS number array
           metadata: {
             ...chunk.metadata,
             text: chunk.text,
