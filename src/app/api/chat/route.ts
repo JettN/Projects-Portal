@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import Anthropic from "@anthropic-ai/sdk";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 import OpenAI from "openai";
 import { retrieveContext } from "@/lib/pinecone";
 
@@ -13,7 +13,7 @@ const claudeClient = PROVIDER === "claude"
   : null;
 
 const geminiClient = PROVIDER === "gemini"
-  ? new GoogleGenerativeAI(process.env.GEMINI_API_KEY!)
+  ? new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! })
   : null;
 
 const openaiClient = PROVIDER === "openai"
@@ -59,7 +59,7 @@ RULES:
 - Do not give general, non-HKN related responses. If the query is unrelated, politely say you can't help and nothing else.
 
 UCSD MEMBERSHIP & EVENTS (must stay accurate - common model mistake):
-- The UCSD Kappa Psi chapter inducts juniors and seniors across several majors, not only ECE. Official chapter messaging includes majors such as ECE, CSE, MAE, BENG, MATH-CS, COGS-ML, and DSC.
+- The UCSD Kappa Psi chapter inducts sophmores, juniors, and seniors across several majors, not only ECE. Official chapter messaging includes majors such as ECE, CSE, MAE, BENG, MATH-CS, COGS-ML, and DSC.
 - Never tell users membership is restricted to ECE majors only unless the KNOWLEDGE BASE chunk explicitly quotes that wording.
 - Most HKN events are open to any UCSD student; membership is not required for many events. If retrieval is thin, say you're unsure about a specific event and they should verify on the website or Discord rather than guessing.
 
@@ -113,20 +113,23 @@ async function call_llm(
     return (response.content[0] as { text: string }).text;
 
   } else if (PROVIDER === "gemini") {
-    const model = geminiClient!.getGenerativeModel({
-      model: "gemini-2.5-flash",
-      systemInstruction: systemPrompt,
-    });
-
     const history = messages.slice(0, -1).map((m) => ({
       role: m.role === "assistant" ? "model" : "user",
       parts: [{ text: m.content }],
     }));
 
-    const chat = model.startChat({ history });
     const lastMessage = messages[messages.length - 1].content;
-    const result = await chat.sendMessage(lastMessage);
-    return result.response.text();
+
+    const response = await geminiClient!.models.generateContent({
+      model: "gemini-2.5-flash",
+      config: { systemInstruction: systemPrompt },
+      contents: [
+        ...history,
+        { role: "user", parts: [{ text: lastMessage }] },
+      ],
+    });
+
+    return response.text ?? "";
 
   } else if (PROVIDER === "openai") {
     const response = await openaiClient!.chat.completions.create({

@@ -1,5 +1,5 @@
 import { Pinecone } from "@pinecone-database/pinecone";
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import { GoogleGenAI } from "@google/genai";
 
 // ── Initialise clients ────────────────────────────────────────────────────────
 
@@ -10,9 +10,9 @@ const pinecone = new Pinecone({
 const INDEX_NAME = process.env.PINECONE_INDEX;
 
 // We use Gemini's embedding model to turn the user's query into a vector.
-// This MUST be the same model used when indexing — both use "embedding-001"
-// so they produce vectors in the same 768-dimensional space.
-const embedder = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
+// This MUST be the same model used when indexing — both use "gemini-embedding-2"
+// so they produce vectors in the same dimensional space.
+const embedder = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
 
 // ── Main export ───────────────────────────────────────────────────────────────
 
@@ -26,9 +26,11 @@ const embedder = new GoogleGenerativeAI(process.env.GEMINI_API_KEY!);
 export async function retrieveContext(query: string, topK = 3): Promise<string> {
   try {
     // 1. Embed the query
-    const model = embedder.getGenerativeModel({ model: "text-embedding-004" });
-    const result = await model.embedContent(query);
-    const queryVector = result.embedding.values;
+    const result = await embedder.models.embedContent({
+      model: "gemini-embedding-2",
+      contents: query,
+    });
+    const queryVector = result.embeddings[0].values;
 
     // 2. Query Pinecone for the nearest neighbours
     const index = pinecone.index(INDEX_NAME);
@@ -52,7 +54,7 @@ export async function retrieveContext(query: string, topK = 3): Promise<string> 
     return chunks.join("\n\n---\n\n");
 
   } catch (err) {
-    // If Pinecone is unreachable, fall back gracefully — Ramsey still works,
+    // If Pinecone is unreachable, fall back gracefully — the assistant still works,
     // just without the extra knowledge base context.
     console.error("[pinecone] retrieval error:", err);
     return "";
