@@ -46,6 +46,7 @@ module.exports = {
         repo:  REPO_NAME,
         path:  CONTENT_PATH,
       });
+      console.log(`[pinecone-plugin] Found ${folders.length} items in ${CONTENT_PATH}:`, folders.map(f => f.name));
 
       const docs = [];
 
@@ -62,7 +63,7 @@ module.exports = {
 
           // Content comes back as base64
           const text = Buffer.from(file.content, "base64").toString("utf-8");
-
+          console.log(`[pinecone-plugin] Fetched ${folder.name}: ${text.length} chars`);
           docs.push({
             text,
             metadata: {
@@ -72,7 +73,7 @@ module.exports = {
             },
           });
         } catch {
-          // Some folders may not have an index.md yet — skip silently
+          console.log(`[pinecone-plugin] Skipped ${folder.name}: ${err.message}`);
         }
       }
 
