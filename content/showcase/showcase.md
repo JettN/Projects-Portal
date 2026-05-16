@@ -1,5 +1,11 @@
 ---
-showcase_description: Temp content...
+showcase_description: >-
+  Come see the innovative projects that HKN Project Teams and other project orgs
+  around campus have been working on in HKN's first ever Project Showcase! Food
+  and drinks will be provided, and attendees will be given the chance to judge
+  for the most impressive project!
+
+  The event will be in a symposium style format, where attendees will walk around the event space and see each project booth.
 date: 2026-05-22T12:00:00
 location: Price Center Ballroom West A
 winner_blurb: This is our first time hosting this event. The first winner of the
