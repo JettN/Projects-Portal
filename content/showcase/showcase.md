@@ -6,7 +6,7 @@ showcase_description: >-
   for the most impressive project!
 
   The event will be in a symposium style format, where attendees will walk around the event space and see each project booth.
-date: 2026-05-22T12:00:00-07:00
+date: 2026-05-22T12:00:00
 location: Price Center Ballroom West A
 winner_blurb: This is our first time hosting this event. The first winner of the
   event will be determined soon!
