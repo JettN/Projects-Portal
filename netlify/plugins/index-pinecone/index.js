@@ -112,8 +112,8 @@ module.exports = {
       for (let i = 0; i < chunks.length; i++) {
         const chunk = chunks[i];
         const result = await client.models.embedContent({
-          model: "gemini-embedding-2",
-          contents: chunk.text,
+          model: "text-embedding-004",
+          contents: [{ parts: [{ text: chunk.text }] }],
         });
         vectors.push({
           id:       `cms-${chunk.metadata.project}-${i}`,
@@ -134,14 +134,7 @@ module.exports = {
       const index = pc.index(PINECONE_INDEX);
 
       // Delete all previously indexed CMS vectors by prefix
-      // Delete existing vectors by their IDs before upserting new ones
-      const existingIds = vectors.map(v => v.id);
-      if (existingIds.length > 0) {
-        const DELETE_BATCH = 100;
-        for (let i = 0; i < existingIds.length; i += DELETE_BATCH) {
-          await index.deleteMany(existingIds.slice(i, i + DELETE_BATCH));
-        }
-      }
+      await index.deleteMany({ source: "github_cms" });
       console.log("[pinecone-plugin] Cleared old github_cms vectors");
 
       // Upsert in batches of 100 (Pinecone limit)
