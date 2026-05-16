@@ -106,7 +106,7 @@ module.exports = {
 
       // ── 3. Embed chunks using Gemini ─────────────────────────────────────────
 
-      const client = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
+      const client = new GoogleGenAI({ apiKey: GEMINI_API_KEY, httpOptions: { apiVersion: "v1" } });
 
       const vectors = [];
       for (let i = 0; i < chunks.length; i++) {

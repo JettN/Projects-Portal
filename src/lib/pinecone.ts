@@ -12,7 +12,7 @@ const INDEX_NAME = process.env.PINECONE_INDEX;
 // We use Gemini's embedding model to turn the user's query into a vector.
 // This MUST be the same model used when indexing — both use "text-embedding-004"
 // so they produce vectors in the same dimensional space.
-const embedder = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY! });
+const embedder = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY!, httpOptions: { apiVersion: "v1" } });
 
 // ── Main export ───────────────────────────────────────────────────────────────
 
