@@ -21,7 +21,7 @@ export default function AdminPage() {
             //repo: 'JettN/Projects-Portal',
             //branch: 'main',
             name: 'git-gateway', // Required for the proxy to intercept requests
-            branch: 'test-deployment',
+            branch: 'main',
           },
           local_backend: false,
           load_config_file: false,
