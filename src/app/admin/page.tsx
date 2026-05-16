@@ -37,7 +37,7 @@ export default function AdminPage() {
                   name: "showcase",
                   fields: [
                     { label: "Showcase Description", name: "showcase_description", widget: "text" },
-                    { label: "Showcase Date (YYYY-MM-DDThh:mm:ss)", name: "date", widget: "string" },
+                    { label: "Showcase Date (YYYY/MM/DDThh:mm:ss)", name: "date", widget: "string", hint: "Example: 2026/05/22T12:00:00" },
                     { label: "Showcase Location", name: "location", widget: "string" },
                     { label: "Winner Blurb", name: "winner_blurb", widget: "text" },
                     { label: "Location Google Map Embed Link", name: "location_link", widget: "string" },

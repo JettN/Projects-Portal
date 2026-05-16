@@ -1,6 +1,6 @@
 ---
 showcase_description: Temp content...
-date: 2026-05-22T12:00:00
+date: 2026/05/22T12:00:00
 location: Price Center Ballroom West A
 winner_blurb: winner blurb...
 location_link: https://www.google.com/maps?q=UCSD%20Price%20Center%20West&output=embed
