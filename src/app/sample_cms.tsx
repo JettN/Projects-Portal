@@ -23,6 +23,11 @@ async function getShowcaseData() {
   return { ...frontmatter, body: content };
 }
 
+async function getResourcesData() {
+  const filePath = path.join(process.cwd(), 'content/resources/resources.md');
+  // FINISH
+}
+
 export default async function Home() {
   const showcase = await getShowcaseData();
 

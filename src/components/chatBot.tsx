@@ -1,7 +1,19 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import ReactMarkdown from "react-markdown";
 import styles from "../styles/chatbot.module.css";
+
+function BubbleContent({ sender, text }: { sender: "user" | "bot"; text: string }) {
+  if (sender === "user") {
+    return <>{text}</>;
+  }
+  return (
+    <div className={styles.mdRoot}>
+      <ReactMarkdown>{text}</ReactMarkdown>
+    </div>
+  );
+}
 
 interface Message {
   id: number;
@@ -10,22 +22,28 @@ interface Message {
   timestamp: Date;
 }
 
-const BOT_RESPONSE =
-  "Thanks for reaching out! I'm Ramsey, the HKN Online Assistant. I can help you learn about our projects, resources, events, and more. Currently, HKN at UCSD is working on several exciting engineering projects. Feel free to ask about our tutoring resources, upcoming events, or how to get involved with the chapter!";
-
-const INITIAL_MESSAGE: Message = {
-  id: 0,
-  sender: "bot",
-  text: "Hello! I'm Ramsey, the HKN Online Assistant. How can I help you learn about our projects today?",
-  timestamp: new Date(),
-};
-
 export default function HKNChatbot() {
   const [isOpen, setIsOpen] = useState(false);
   const [isExpanded, setIsExpanded] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([INITIAL_MESSAGE]);
+
+  // FIXED: initial message created inside useState initializer (runs client-side only)
+  const [messages, setMessages] = useState<Message[]>(() => [
+    {
+      id: 0,
+      sender: "bot",
+      text: "Hello! I'm Ramsey, the HKN Online Assistant. How can I help you learn about our projects today?",
+      timestamp: new Date(),
+    },
+  ]);
+
   const [inputValue, setInputValue] = useState("");
   const [isTyping, setIsTyping] = useState(false);
+
+  // NEW: track conversation history for real LLM memory
+  const [conversationHistory, setConversationHistory] = useState<
+    { role: "user" | "assistant"; content: string }[]
+  >([]);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -41,13 +59,16 @@ export default function HKNChatbot() {
     }
   }, [isOpen]);
 
-  const handleSend = () => {
+  // UPDATED: calls the real /api/chat route instead of returning a hardcoded string
+  const handleSend = async () => {
     if (!inputValue.trim()) return;
+
+    const userText = inputValue.trim();
 
     const userMsg: Message = {
       id: Date.now(),
       sender: "user",
-      text: inputValue.trim(),
+      text: userText,
       timestamp: new Date(),
     };
 
@@ -55,16 +76,48 @@ export default function HKNChatbot() {
     setInputValue("");
     setIsTyping(true);
 
-    setTimeout(() => {
+    const updatedHistory = [
+      ...conversationHistory,
+      { role: "user" as const, content: userText },
+    ];
+
+    try {
+      const response = await fetch("/api/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: updatedHistory }),
+      });
+
+      const data = await response.json();
+      const replyText = data.reply ?? "Sorry, something went wrong. Please try again.";
+
+      setConversationHistory([
+        ...updatedHistory,
+        { role: "assistant", content: replyText },
+      ]);
+
       setIsTyping(false);
-      const botMsg: Message = {
-        id: Date.now() + 1,
-        sender: "bot",
-        text: BOT_RESPONSE,
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, botMsg]);
-    }, 1200);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          sender: "bot",
+          text: replyText,
+          timestamp: new Date(),
+        },
+      ]);
+    } catch {
+      setIsTyping(false);
+      setMessages((prev) => [
+        ...prev,
+        {
+          id: Date.now() + 1,
+          sender: "bot",
+          text: "Sorry, I'm having trouble connecting right now. Please try again.",
+          timestamp: new Date(),
+        },
+      ]);
+    }
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -171,7 +224,7 @@ export default function HKNChatbot() {
                 )}
                 <div className={`${styles.msgGroup} ${styles[msg.sender]} ${isExpanded ? styles.expanded : ""}`}>
                   <div className={`${styles.bubble} ${styles[msg.sender]}`}>
-                    {msg.text}
+                    <BubbleContent sender={msg.sender} text={msg.text} />
                   </div>
                   <span className={styles.timestamp}>{formatTime(msg.timestamp)}</span>
                 </div>

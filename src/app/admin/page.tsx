@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import Script from 'next/script'
+
 
 export default function AdminPage() {
   const isInitialized = useRef(false);
@@ -19,13 +21,12 @@ export default function AdminPage() {
             //repo: 'JettN/Projects-Portal',
             //branch: 'main',
             name: 'git-gateway', // Required for the proxy to intercept requests
-            branch: 'main',
-            proxy_url: 'http://localhost:8081/api/v1' // Explicitly point to your proxy
+            branch: 'test-deployment',
           },
-          local_backend: true,
+          local_backend: false,
           load_config_file: false,
-          media_folder: 'public/images',
-          public_folder: '',
+          media_folder: '/public/images',
+          public_folder: '/images',
           collections: [
             {
               name: "showcase",
@@ -87,6 +88,36 @@ export default function AdminPage() {
               ]
             },
             {
+              name: "resources",
+              label: "Resources Page",
+              files: [
+                {
+                  file: "content/resources/resources.md",
+                  label: "Resources Page",
+                  name: "resources",
+                  fields: [
+                    {
+                      label: "Resource Categories", name: "resource_categories", widget: "list",
+                      fields: [
+                        { label: "Category Title", name: "title", widget: "string" },
+                        {
+                          label: "Links", name: "links", widget: "list",
+                          fields: [
+                            { label: "Label", name: "label", widget: "string" },
+                            { label: "URL", name: "url", widget: "string" },
+                            { label: "Description", name: "description", widget: "string", required: false }
+                          ]
+                        }
+                      ]
+                    },
+                    { label: "Contact Email", name: "contact_email", widget: "string" },
+                    { label: "Contact LinkedIn", name: "contact_linkedin", widget: "string" },
+                    { label: "Contact Instagram", name: "contact_instagram", widget: "string" }
+                  ]
+                }
+              ]
+            },
+            {
               name: "projects",
               label: "Projects",
               folder: "content/projects",
@@ -101,7 +132,7 @@ export default function AdminPage() {
                 { label: "Team Members", name: "team", widget: "list" },
                 { label: "Project Start Date", name: "start_date", widget: "datetime" },
                 { label: "Project Type", name: "type", widget: "select", options: ["Computer Science", "Data Science", "Electrical", "Mechanical", "Other"] },
-                { label: "Preview Image", name: "preview_image", widget: "image", media_folder: "./",     public_folder: "./" },
+                { label: "Preview Image", name: "preview_image", widget: "image", media_folder: "/public/images/projects",     public_folder: "/images/projects" },
                 { label: "Status", name: "status", widget: "select", options: ["active", "past"]},
                 { label: "Status", name: "winner_status", widget: "select", options: ["winner", "not winner"]},
                 { label: "Keywords", name: "keywords", widget: "list"}
@@ -127,6 +158,10 @@ export default function AdminPage() {
 
   return (
     <>
+      <Script 
+        src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+        strategy="beforeInteractive"
+      />
       <style jsx global>{`
         /* Hides error overlays */
         .nextjs-error-overlay, 
