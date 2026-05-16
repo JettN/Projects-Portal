@@ -3,7 +3,7 @@ resource_categories:
   - title: HKN@UCSD
     links:
       - label: HKN@UCSD Website
-        url: https://hkn.ucsd.edu
+        url: https://hknucsd.com/
         description: The official HKN UCSD chapter website with information about the
           organization.
   - title: HKN Portal
