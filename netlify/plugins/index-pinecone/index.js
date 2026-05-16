@@ -116,14 +116,18 @@ module.exports = {
           contents: chunk.text,
         });
 
-        // Log the raw result so we can see the shape
-        console.log(`[pinecone-plugin] Raw result:`, JSON.stringify(result).slice(0, 400));
+        // Log full result structure for debugging
+        const resultStr = JSON.stringify(result);
+        console.log(`[pinecone-plugin] Full result (first 800):`, resultStr.slice(0, 800));
 
-        // Try both possible response shapes
+        // Try all known response shapes
         const values =
           result?.embeddings?.[0]?.values ||
           result?.embedding?.values ||
-          null;
+          result?.sdkHttpResponse?.body?.embeddings?.[0]?.values ||
+          (typeof result?.text === 'function' ? null : null);
+
+        console.log(`[pinecone-plugin] Values found:`, values ? values.length : 'none');
 
         if (!values || values.length === 0) {
           console.log(`[pinecone-plugin] Warning: no values for chunk ${i}, skipping`);
