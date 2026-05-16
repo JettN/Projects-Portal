@@ -128,14 +128,10 @@ module.exports = {
       console.log(`[pinecone-plugin] Embedded ${vectors.length} vectors`);
 
       // ── 4. Push to Pinecone ───────────────────────────────────────────────────
-      // We delete existing cms vectors first so removed projects don't linger.
-
       const pc    = new Pinecone({ apiKey: PINECONE_API_KEY });
       const index = pc.index(PINECONE_INDEX);
 
-      // Delete all previously indexed CMS vectors by prefix
-      await index.deleteMany({ source: "github_cms" });
-      console.log("[pinecone-plugin] Cleared old github_cms vectors");
+      // Upsert overwrites existing vectors with the same ID — no explicit delete needed.
 
       // Upsert in batches of 100 (Pinecone limit)
       const BATCH_SIZE = 100;
