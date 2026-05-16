@@ -163,8 +163,9 @@ module.exports = {
           continue;
         }
         
-        // Fix: Wrap the batch array in an object configuration
+        // Fix: Supply both 'records' and 'vectors' so whichever version your package is on accepts it
         await index.upsert({
+          records: batch,
           vectors: batch
         });
       }
