@@ -15,7 +15,7 @@ module.exports = {
 
     try {
       const { Pinecone } = await import("@pinecone-database/pinecone");
-      const { GoogleGenerativeAI } = await import("@google/generative-ai");
+      const { GoogleGenAI } = await import("@google/genai");
       const { Octokit } = await import("@octokit/rest");
       const path = await import("path");
 
@@ -106,16 +106,18 @@ module.exports = {
 
       // ── 3. Embed chunks using Gemini ─────────────────────────────────────────
 
-      const genai = new GoogleGenerativeAI(GEMINI_API_KEY);
-      const embedModel = genai.getGenerativeModel({ model: "text-embedding-005" });
+      const client = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
 
       const vectors = [];
       for (let i = 0; i < chunks.length; i++) {
         const chunk = chunks[i];
-        const result = await embedModel.embedContent(chunk.text);
+        const result = await client.models.embedContent({
+          model: "gemini-embedding-2",
+          contents: chunk.text,
+        });
         vectors.push({
           id:       `cms-${chunk.metadata.project}-${i}`,
-          values:   result.embedding.values,
+          values:   result.embeddings[0].values,
           metadata: {
             ...chunk.metadata,
             text: chunk.text,

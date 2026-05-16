@@ -1,0 +1,10 @@
+{
+  "name": "index-pinecone",
+  "version": "1.0.0",
+  "type": "module",
+  "dependencies": {
+    "@google/genai": "^1.0.0",
+    "@octokit/rest": "^20.0.0",
+    "@pinecone-database/pinecone": "^3.0.0"
+  }
+}
