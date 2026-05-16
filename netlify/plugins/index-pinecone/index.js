@@ -134,7 +134,14 @@ module.exports = {
       const index = pc.index(PINECONE_INDEX);
 
       // Delete all previously indexed CMS vectors by prefix
-      await index.deleteMany({ source: "github_cms" });
+      // Delete existing vectors by their IDs before upserting new ones
+      const existingIds = vectors.map(v => v.id);
+      if (existingIds.length > 0) {
+        const DELETE_BATCH = 100;
+        for (let i = 0; i < existingIds.length; i += DELETE_BATCH) {
+          await index.deleteMany(existingIds.slice(i, i + DELETE_BATCH));
+        }
+      }
       console.log("[pinecone-plugin] Cleared old github_cms vectors");
 
       // Upsert in batches of 100 (Pinecone limit)
