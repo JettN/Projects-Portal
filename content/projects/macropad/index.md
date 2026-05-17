@@ -1,5 +1,5 @@
 ---
-title: Macropad
+title: MacroPad
 team:
   - AaravVidhawan(TeamLead)
   - YuvanandSaravanan(co-TeamLead)
