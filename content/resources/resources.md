@@ -22,5 +22,5 @@ resource_categories:
           department.
 contact_email: hkn@ucsd.edu
 contact_linkedin: https://linkedin.com/company/hkn-ucsd
-contact_instagram: https://instagram.com/hknucsd
+contact_instagram: https://www.instagram.com/hkn.at.ucsd?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==
 ---
