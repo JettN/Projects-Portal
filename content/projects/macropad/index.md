@@ -11,7 +11,7 @@ team:
   - Blase Londono
   - Dakota Barnhardt
 start_date: 2025-01-28T19:30:00.000-08:00
-type: Electrical
+type: Electrical Engineering, Computer Engineering, Computer Science
 featured: true
 team_photo: /images/projects/macropad_team_photo.jpg
 preview_image: /images/projects/macropad.png
