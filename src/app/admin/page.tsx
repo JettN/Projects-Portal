@@ -100,6 +100,13 @@ export default function AdminPage() {
                     { label: "About Subtitle", name: "about_subtitle", widget: "string", hint: "Heading under 'What is HKN Projects?'" },
                     { label: "About Body", name: "about_body", widget: "text", hint: "Paragraph text under the subtitle" },
                     {
+                      label: "Slideshow Images",
+                      name: "slideshow_images",
+                      widget: "list",
+                      hint: "Images displayed in the rotating hero slideshow on the home page and showcase page",
+                      field: { label: "Image", name: "image", widget: "image", media_folder: "/public/images/slideshow", public_folder: "/images/slideshow" }
+                    },
+                    {
                       label: "Featured Projects",
                       name: "featured_projects",
                       widget: "list",

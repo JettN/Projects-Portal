@@ -8,6 +8,7 @@ import path from "path";
 interface HomeFrontmatter {
   about_subtitle?: string;
   about_body?: string;
+  slideshow_images?: unknown[];
 }
 
 // Structure for individual project markdown files (only extracts necessary fields)
@@ -66,17 +67,28 @@ async function getHomeContent(): Promise<{ about_subtitle: string; about_body: s
   };
 }
 
+async function getSlideshowImages(): Promise<string[]> {
+  const homePath = path.join(process.cwd(), "content/home/homepage.md");
+  if (!fs.existsSync(homePath)) return [];
+  const { data } = matter(fs.readFileSync(homePath, "utf-8"));
+  const raw = data.slideshow_images ?? [];
+  return Array.isArray(raw)
+    ? raw.map((x: unknown) => (typeof x === 'string' ? x : (x as { image?: string })?.image ?? '')).filter(Boolean)
+    : [];
+}
+
 // Home Page
 export default async function Home() {
-  const [featuredProjects, homeContent] = await Promise.all([
+  const [featuredProjects, homeContent, slideshowImages] = await Promise.all([
     getFeaturedProjects(),
     getHomeContent(),
+    getSlideshowImages(),
   ]);
 
   return (
     <div className={styles.page}>
       {/* Full-viewport image slideshow with page title and subtitle*/}
-      <HeroSlideshow />
+      <HeroSlideshow slideshowImages={slideshowImages} />
 
       <main className={styles.mainContent}>
         {/* What is HKN Projects? */}

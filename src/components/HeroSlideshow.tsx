@@ -3,34 +3,36 @@
 import { useState, useEffect } from "react";
 import styles from "../styles/home.module.css";
 
-// Image slides
-const slides = [
-  { bg: "url(/hero_slideshow/heroSlideshow1.png)" },
-  { bg: "url(/hero_slideshow/heroSlideshow2.jpg)" },
-  { bg: "url(/hero_slideshow/heroSlideshow3.JPG)" },
-  { bg: "url(/hero_slideshow/heroSlideshow4.png)" },
+const FALLBACK_SLIDES = [
+  "/hero_slideshow/heroSlideshow1.png",
+  "/hero_slideshow/heroSlideshow2.jpg",
+  "/hero_slideshow/heroSlideshow3.JPG",
+  "/hero_slideshow/heroSlideshow4.png",
 ];
 
-export default function HeroSlideshow() {
-  // Index of the currently active slide
+interface HeroSlideshowProps {
+  slideshowImages?: string[];
+}
+
+export default function HeroSlideshow({ slideshowImages = [] }: HeroSlideshowProps) {
+  const images = slideshowImages.length > 0 ? slideshowImages : FALLBACK_SLIDES;
   const [current, setCurrent] = useState(0);
 
-  // Change slides every 5 seconds
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrent((prev) => (prev + 1) % slides.length);
+      setCurrent((prev) => (prev + 1) % images.length);
     }, 5000);
     return () => clearInterval(interval);
-  }, []);
+  }, [images.length]);
 
   return (
     <section className={styles.hero}>
       {/* Slide backgrounds */}
-      {slides.map((slide, i) => (
+      {images.map((src, i) => (
         <div
           key={i}
           className={`${styles.heroSlide} ${i === current ? styles.heroSlideActive : ""}`}
-          style={{ backgroundImage: slide.bg }}
+          style={{ backgroundImage: `url(${src})` }}
         />
       ))}
 

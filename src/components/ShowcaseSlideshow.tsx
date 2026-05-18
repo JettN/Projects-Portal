@@ -31,7 +31,28 @@ export default function ShowcaseSlideshow({
   const [current, setCurrent] = useState(0);
 
   // Date formatting
-  const eventDate = new Date(date.replaceAll("/", "-"));  
+  // Parse the date as Pacific Time by using Intl to get the correct UTC offset.
+  // Strip any existing timezone info and reinterpret as America/Los_Angeles.
+  const parseDateAsPacific = (dateStr: string): Date => {
+    // Remove any trailing Z or offset so we treat it as a naive local string
+    const naive = dateStr.replace(/Z|[+-]\d{2}:\d{2}$/, '');
+    // Use Intl to find the UTC offset for Pacific Time at that moment
+    const tempDate = new Date(naive + 'Z'); // parse as UTC first to get a Date
+    const pacificFormatter = new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Los_Angeles',
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit',
+      hour12: false,
+    });
+    // Re-parse using the naive string interpreted in PT by finding the offset
+    const parts = pacificFormatter.formatToParts(tempDate);
+    const get = (type: string) => parts.find(p => p.type === type)?.value ?? '0';
+    const ptNow = new Date(`${get('year')}-${get('month')}-${get('day')}T${get('hour') === '24' ? '00' : get('hour')}:${get('minute')}:${get('second')}Z`);
+    const offsetMs = tempDate.getTime() - ptNow.getTime();
+    return new Date(new Date(naive).getTime() - offsetMs);
+  };
+
+  const eventDate = parseDateAsPacific(date);  
   // Formats to "MM/DD/YYYY"
   const formattedDate = eventDate.toLocaleDateString("en-US", {
     month: "2-digit",
@@ -47,7 +68,7 @@ export default function ShowcaseSlideshow({
 
   // Countdown calculation
   const calculateTimeLeft = (): TimeLeft => {
-    const difference = +new Date(date.replaceAll("/", "-")) - +new Date();
+    const difference = +parseDateAsPacific(date) - +new Date();
     if (difference > 0) {
       return {
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),

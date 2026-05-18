@@ -82,6 +82,18 @@ export default async function ShowcasePage() {
   const projects = await getProjects();
   const activeProjects = projects.filter(p => p.status === 'active');
   const winnerProject = projects.filter(p => p.winner_status === 'winner');
+
+  // Slideshow images are managed in homepage.md (shared with home page)
+  const slideshowImages: string[] = [];
+  const homePath = path.join(process.cwd(), 'content/home/homepage.md');
+  if (fs.existsSync(homePath)) {
+    const homeRaw = matter(fs.readFileSync(homePath, 'utf-8')).data.slideshow_images ?? [];
+    if (Array.isArray(homeRaw)) {
+      slideshowImages.push(
+        ...homeRaw.map((x: unknown) => (typeof x === 'string' ? x : (x as { image?: string })?.image ?? '')).filter(Boolean)
+      );
+    }
+  }
   
   return (
     <div className={styles.page}>
@@ -89,6 +101,7 @@ export default async function ShowcasePage() {
       <ShowcaseSlideshow 
         date={showcase.date}
         location={showcase.location}
+        slideshowImages={slideshowImages}
       />
 
       <main className={styles.mainContent}>
