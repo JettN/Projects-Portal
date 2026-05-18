@@ -44,7 +44,7 @@ async function getProjects(): Promise<Project[]> {
       preview_image: data.preview_image,
       team: data.team,
       team_leader: data.team_leader,
-      start_date: data.start_date,
+      start_date: data.start_date instanceof Date ? data.start_date.toISOString() : String(data.start_date ?? ''),
       type: data.type,
       status: data.status,
       body: content,

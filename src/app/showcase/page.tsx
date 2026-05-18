@@ -36,7 +36,7 @@ async function getShowcaseData() {
 
   return {
     showcase_description: data.showcase_description,
-    date: data.date,
+    date: data.date instanceof Date ? data.date.toISOString() : String(data.date ?? ''),
     location: data.location,
     winner_blurb: data.winner_blurb,
     location_link: data.location_link,

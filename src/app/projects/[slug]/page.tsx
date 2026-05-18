@@ -61,6 +61,16 @@ export default async function Entry({
   const fileContent = fs.readFileSync(projectPath, "utf-8");
   const { data, content } = matter(fileContent);
   const frontmatter = data as ProjectFrontmatter;
+
+  // gray-matter parses YAML dates into Date objects; convert to strings
+  // before passing to the client component to avoid Next.js serialization errors
+  if (frontmatter.start_date instanceof Date) {
+    frontmatter.start_date = (frontmatter.start_date as Date).toISOString();
+  }
+  if (frontmatter.end_date instanceof Date) {
+    frontmatter.end_date = (frontmatter.end_date as Date).toISOString();
+  }
+
   const carouselCards = docCarouselCards(slug, frontmatter);
 
   return (
