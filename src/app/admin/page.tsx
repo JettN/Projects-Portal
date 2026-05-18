@@ -3,24 +3,52 @@
 import { useEffect, useRef } from 'react';
 import Script from 'next/script'
 
+// Extend Window to include netlifyIdentity
+declare global {
+  interface Window {
+    netlifyIdentity: {
+      on: (event: string, cb: (user?: unknown) => void) => void;
+      off: (event: string, cb: (user?: unknown) => void) => void;
+    };
+  }
+}
 
 export default function AdminPage() {
   const isInitialized = useRef(false);
 
   useEffect(() => {
-    // 1. Initialization Gate
     if (isInitialized.current) return;
+
+    // After Netlify Identity login, Next.js doesn't reload the page so the CMS
+    // never re-initializes. Force a full reload so auth is picked up correctly.
+    const handleLogin = () => window.location.reload();
+
+    const attachIdentityListeners = () => {
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on('login', handleLogin);
+      }
+    };
+
+    // Identity widget may not be ready immediately — poll briefly
+    if (window.netlifyIdentity) {
+      attachIdentityListeners();
+    } else {
+      const interval = setInterval(() => {
+        if (window.netlifyIdentity) {
+          attachIdentityListeners();
+          clearInterval(interval);
+        }
+      }, 100);
+      setTimeout(() => clearInterval(interval), 5000);
+    }
 
     (async () => {
       const CMS = (await import('decap-cms-app')).default;
-      
+
       CMS.init({
         config: {
           backend: {
-            //name: 'github',
-            //repo: 'JettN/Projects-Portal',
-            //branch: 'main',
-            name: 'git-gateway', // Required for the proxy to intercept requests
+            name: 'git-gateway',
             branch: 'main',
           },
           local_backend: false,
@@ -40,11 +68,11 @@ export default function AdminPage() {
                   name: "showcase",
                   fields: [
                     { label: "Showcase Description", name: "showcase_description", widget: "text" },
-                    { label: "Showcase Date (YYYY-MM-DDThh:mm:ss)", name: "date", widget: "string" },
+                    { label: "Showcase Date (YYYY-MM-DDThh:mm:ss)", name: "date", widget: "datetime", date_format: true },
                     { label: "Showcase Location", name: "location", widget: "string" },
                     { label: "Winner Blurb", name: "winner_blurb", widget: "text" },
                     { label: "Location Google Map Embed Link", name: "location_link", widget: "string" },
-                    { label: "Location Image", name: "location_image", widget: "image", public_folder: "/",},
+                    { label: "Location Image", name: "location_image", widget: "image", public_folder: "/" },
                     {
                       label: "FAQs", name: "faqs", widget: "list", min: 3,
                       fields: [
@@ -58,7 +86,6 @@ export default function AdminPage() {
                     }
                   ]
                 }
-                
               ]
             },
             {
@@ -67,7 +94,7 @@ export default function AdminPage() {
               files: [
                 {
                   file: "content/home/homepage.md",
-                  label: "Home Page Featured Carousel",
+                  label: "Home Page Content",
                   name: "homepage",
                   fields: [
                     { label: "About Subtitle", name: "about_subtitle", widget: "string", hint: "Heading under 'What is HKN Projects?'" },
@@ -128,16 +155,18 @@ export default function AdminPage() {
               create: true,
               slug: "{{slug}}",
               path: "{{slug}}/index",
-              media_folder: "", 
+              media_folder: "",
               public_folder: "",
               fields: [
                 { label: "Project Title", name: "title", widget: "string" },
-                { label: "Detailed Description", name: "body", widget: "markdown" },
+                { label: "Detailed Description", name: "body", widget: "text" },
                 { label: "Documentation Link", name: "doc_link", widget: "string", hint: "URL to the project's documentation page (shown above the image carousel)", required: false },
                 { label: "Team Leader", name: "team_leader", widget: "string", hint: "Full name of the team leader (first and last name)", required: false },
                 { label: "Team Members", name: "team", widget: "list", field: { label: "Member Name", name: "member", widget: "string", hint: "Enter first and last name" } },
-                { label: "Project Start Date", name: "start_date", widget: "datetime" },
-                { label: "Project Type", name: "type", widget: "select", options: ["Computer Science", "Data Science", "Electrical", "Mechanical", "Other"] },
+                { label: "Project Start Date", name: "start_date", widget: "datetime", date_format: true },
+                { label: "Project End Date", name: "end_date", widget: "datetime", date_format: true, required: false, hint: "Leave blank if the project is still active" },
+                { label: "Project Type", name: "type", widget: "string", hint: "e.g. Computer Science, Data Science, Electrical, Mechanical — or enter a custom type" },
+                { label: "Featured on Home Page", name: "featured", widget: "boolean", default: false, hint: "Toggle on to include this project in the home page featured carousel" },
                 { label: "Team Photo", name: "team_photo", widget: "image", media_folder: "/public/images/projects", public_folder: "/images/projects", hint: "Group photo displayed in the Project Members section", required: false },
                 { label: "Preview Image", name: "preview_image", widget: "image", media_folder: "/public/images/projects", public_folder: "/images/projects", hint: "Thumbnail shown on the projects listing page" },
                 {
@@ -147,9 +176,9 @@ export default function AdminPage() {
                   hint: "Add as many documentation/project images as you want — these will appear in the carousel slideshow",
                   field: { label: "Image", name: "image", widget: "image", media_folder: "/public/images/projects", public_folder: "/images/projects" }
                 },
-                { label: "Status", name: "status", widget: "select", options: ["active", "past"]},
-                { label: "Status", name: "winner_status", widget: "select", options: ["winner", "not winner"]},
-                { label: "Keywords", name: "keywords", widget: "list"}
+                { label: "Status", name: "status", widget: "select", options: ["active", "past"] },
+                { label: "Winner Status", name: "winner_status", widget: "select", options: ["winner", "not winner"] },
+                { label: "Keywords", name: "keywords", widget: "list" }
               ]
             }
           ],
@@ -159,11 +188,12 @@ export default function AdminPage() {
       isInitialized.current = true;
     })();
 
-    // 2. The Fix: Manual Cleanup
     return () => {
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.off('login', handleLogin);
+      }
       const root = document.getElementById('nc-root');
       if (root) {
-        // Clear the internal HTML so React can remove the node safely
         root.innerHTML = '';
       }
       isInitialized.current = false;
@@ -172,36 +202,32 @@ export default function AdminPage() {
 
   return (
     <>
-      <Script 
+      <Script
         src="https://identity.netlify.com/v1/netlify-identity-widget.js"
         strategy="beforeInteractive"
       />
       <style jsx global>{`
-        /* Hides error overlays */
-        .nextjs-error-overlay, 
-        [class*="error-overlay"], 
+        .nextjs-error-overlay,
+        [class*="error-overlay"],
         nextjs-portal {
           display: none !important;
           visibility: hidden !important;
         }
-        
-        /* Reset the container */
-        #nc-root { 
-          height: 100vh; 
-          width: 100%; 
+
+        #nc-root {
+          height: 100vh;
+          width: 100%;
           position: relative;
-          overflow: hidden; /* Prevents double scrollbars */
+          overflow: hidden;
         }
 
-        /* Force the CMS editor pane to be scrollable */
         #nc-root > div > div > div:nth-child(2) {
-          height: calc(100vh - 80px) !important; /* Adjust 80px based on header height */
+          height: calc(100vh - 80px) !important;
           overflow-y: auto !important;
           padding-bottom: 40px !important;
         }
 
-        /* Force the header to stay on top */
-        #nc-root .cms-top-bar, 
+        #nc-root .cms-top-bar,
         #nc-root > div > div > div:first-child {
           height: 60px !important;
         }

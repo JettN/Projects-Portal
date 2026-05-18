@@ -13,6 +13,9 @@ interface ProjectFrontmatter {
   preview_image?: string;
   carousel_images?: unknown;
   doc_link?: string;
+  start_date?: string;
+  end_date?: string;
+  type?: string;
 }
 
 function docCarouselCards(

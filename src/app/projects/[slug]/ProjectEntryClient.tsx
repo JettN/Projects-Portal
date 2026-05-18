@@ -8,12 +8,15 @@ import FeaturedCarousel, {
 
 interface ProjectFrontmatter {
   title?: string;
-  team?: string[];
+  team?: string[]
   team_leader?: string;
   team_photo?: string;
   preview_image?: string;
   carousel_images?: unknown;
   doc_link?: string;
+  start_date?: string;
+  end_date?: string;
+  type?: string;
 }
 
 interface Props {
@@ -89,6 +92,22 @@ export default function ProjectEntryClient({ frontmatter, content, carouselCards
             />
 
             <div className={styles.memberList}>
+              {(frontmatter.start_date || frontmatter.type) && (
+                <div className={styles.projectMeta}>
+                  {frontmatter.type && (
+                    <p className={styles.metaItem}>{frontmatter.type}</p>
+                  )}
+                  {frontmatter.start_date && (
+                    <p className={styles.metaItem}>
+                      {new Date(frontmatter.start_date).getFullYear()}
+                      {frontmatter.end_date
+                        ? ` – ${new Date(frontmatter.end_date).getFullYear()}`
+                        : ' – Present'}
+                    </p>
+                  )}
+                </div>
+              )}
+
               {frontmatter.team_leader && (
                 <>
                   <h3>Team Leader:</h3>

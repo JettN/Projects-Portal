@@ -188,6 +188,18 @@
   font-weight: 500;
 }
 
+.projectMeta {
+  margin-bottom: 16px;
+}
+
+.metaItem {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
+  color: #60a5fa;
+  font-size: 0.9rem;
+  margin: 2px 0;
+  opacity: 0.85;
+}
+
 .teamLeader {
   font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
   color: #60a5fa;
