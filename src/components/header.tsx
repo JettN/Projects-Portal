@@ -12,10 +12,12 @@ export default function Header() {
       padding: '1rem 2rem', 
       backdropFilter: 'blur(10px)', 
       backgroundColor: '#11192840',
-      position: 'sticky',      // Allows the background content to show through
+      position: 'fixed',
       width: '100%',
       top: 0,
-      zIndex: 10 
+      zIndex: 10,
+      fontFamily: 'var(--font-geist-sans)',
+      fontSize: '1.2rem',
     }}>
       <nav style={{ 
         display: 'flex', 
@@ -24,20 +26,19 @@ export default function Header() {
       }}>
         <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
           <Image 
-            src="/hkn-logo.svg"     // Path to your image in the /public folder
+            src="/hkn-logo.svg"
             alt="HKN Logo" 
-            width={70}          // Set your desired width
-            height={70}         // Set your desired height
+            width={70}
+            height={70}
           />
         </Link>
 
         {/* Navigation Links Section */}
         <div style={{ display: 'flex', gap: '20px' }}>
+          <Link href="/" style={{ color: pathname === '/' ? '#5f69a6' : '#bfdbfee6', textDecoration: 'none' }}>Home</Link>
           <Link href="/projects" style={{ color: pathname === '/projects' ? '#5f69a6' : '#bfdbfee6', textDecoration: 'none' }}>All Projects</Link>
-          <Link href="/projects/test-2" style={{ color: pathname === '/projects/test-2' ? '#5f69a6' : '#bfdbfee6', textDecoration: 'none' }}>Individual Project</Link>
           <Link href="/resources" style={{ color: pathname === '/resources' ? '#5f69a6' : '#bfdbfee6', textDecoration: 'none' }}>Resources</Link>
           <Link href="/showcase" style={{ color: pathname === '/showcase' ? '#5f69a6' : '#bfdbfee6', textDecoration: 'none' }}>Showcase</Link>
-          <Link href="/admin" style={{ color: pathname === '/admin' ? '#5f69a6' : '#bfdbfee6', textDecoration: 'none' }}>Admin</Link>
         </div>
       </nav>
     </header>

@@ -15,7 +15,7 @@ interface FAQ {
 }
 
 interface Sponsor {
-  logo: string;
+  logo?: string;
 }
 
 interface Showcase {
@@ -26,7 +26,7 @@ interface Showcase {
   location_link: string;
   location_image: string;
   faqs: FAQ[];
-  sponsors: Sponsor[];
+  sponsors: (string | Sponsor)[];
 }
 
 async function getShowcaseData() {
@@ -42,7 +42,7 @@ async function getShowcaseData() {
     location_link: data.location_link,
     location_image: data.location_image,
     faqs: data.faqs || [],
-    sponsors: data.sponsors || [],
+    sponsors: (data.sponsors || []) as (string | Sponsor)[],
   };
 }
 
@@ -174,9 +174,25 @@ export default async function ShowcasePage() {
          <div className={styles.sectionContainer}>
           <h3 className={styles.title}>Past Sponsors</h3>
           <div className={styles.sponsorsContainer}>
-            <div className={styles.sponsor}></div>
-            <div className={styles.sponsor}></div>
-            <div className={styles.sponsor}></div>
+            {showcase.sponsors.length > 0 ? (
+              showcase.sponsors.map((sponsor, index) => {
+                // Sponsors may be stored as plain strings or as {logo: string} objects
+                const src = typeof sponsor === 'string' ? sponsor : sponsor.logo;
+                if (!src) return null;
+                return (
+                  <div key={index} className={styles.sponsor}>
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={src}
+                      alt={`Sponsor ${index + 1}`}
+                      style={{ objectFit: 'contain', width: '100%', height: '100%' }}
+                    />
+                  </div>
+                );
+              })
+            ) : (
+              <p style={{ opacity: 0.6 }}>No sponsors listed yet.</p>
+            )}
           </div>
         </div>
 

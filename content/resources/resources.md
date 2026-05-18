@@ -1,0 +1,26 @@
+---
+resource_categories:
+  - title: HKN@UCSD
+    links:
+      - label: HKN@UCSD Website
+        url: https://hknucsd.com/
+        description: The official HKN UCSD chapter website with information about the
+          organization.
+  - title: HKN Portal
+    links:
+      - label: HKN Member Portal
+        url: https://portal.hknucsd.com/
+        description: Member portal for tracking points, events, and requirements.
+  - title: Other Sites/Resources
+    links:
+      - label: IEEE Student Branch
+        url: https://ieeeatucsd.org/
+        description: UCSD's IEEE student branch for networking and engineering events.
+      - label: UCSD ECE Department
+        url: https://ece.ucsd.edu
+        description: Official page for the UCSD Electrical and Computer Engineering
+          department.
+contact_email: hkn@ucsd.edu
+contact_linkedin: https://linkedin.com/company/hkn-ucsd
+contact_instagram: https://www.instagram.com/hkn.at.ucsd?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==
+---

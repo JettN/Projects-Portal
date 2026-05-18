@@ -1,22 +1,12 @@
 .page {
-  background-color: #0b1629;
+  background-color: #071A2F;
   color: #ffffff;
   min-height: 100vh;
   padding: 60px 20px;
+  padding-top: calc(60px + 100px);
   font-family: Georgia, serif;
   position: relative;
   overflow: hidden;
-}
-
-.pageBackground {
-  position: absolute;
-  inset: 0;
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  opacity: 0.45;
-  pointer-events: none;
-  z-index: 0;
 }
 
 .container {
@@ -29,9 +19,18 @@
 .mainTitle {
   font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
   text-align: center;
-  margin-bottom: 60px;
-  font-size: 2.5rem;
+  margin-bottom: 8px;
+  font-size: 65px;
   letter-spacing: 1px;
+}
+
+.projectDateline {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
+  text-align: center;
+  color: #60a5fa;
+  font-size: 1rem;
+  opacity: 0.85;
+  margin: 0 0 52px 0;
 }
 
 .sectionTitle {
@@ -56,6 +55,22 @@
   margin: 0;
   color: #ffffff;
   line-height: 1.6;
+}
+
+.docLink {
+  display: inline-block;
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
+  color: #60a5fa;
+  font-size: 1rem;
+  text-decoration: none;
+  margin-bottom: 20px;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s, color 0.2s;
+}
+
+.docLink:hover {
+  color: #93c5fd;
+  border-bottom-color: #93c5fd;
 }
 
 .carouselWrapper {
@@ -165,9 +180,10 @@
 .memberPhoto {
   width: 350px;
   height: 350px;
-  background-color: #d9d9d9;
-  background-size: cover;
+  background-color: #1a2f4a;
+  background-size: contain;
   background-position: center;
+  background-repeat: no-repeat;
 }
 
 .memberList {
@@ -181,9 +197,87 @@
   font-weight: 500;
 }
 
+.teamLeader {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
+  color: #60a5fa;
+  font-size: 1rem;
+  font-weight: 400;
+  margin: 4px 0 0 0;
+}
+
 .memberList p {
   font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
   color: #a0aec0;
   font-size: 1rem;
   margin: 4px 0;
+}
+
+/* Documentation link */
+.galleryTitle {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
+  color: #4a90e2;
+  font-size: 1.4rem;
+  font-weight: 600;
+  text-transform: none;
+  margin-bottom: 15px;
+}
+
+.docLinkWrapper {
+  margin-bottom: 24px;
+}
+
+.docLink {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
+  color: #60a5fa;
+  font-size: 1rem;
+  text-decoration: none;
+  border: 1px solid #60a5fa;
+  padding: 8px 20px;
+  border-radius: 4px;
+  display: inline-block;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.docLink:hover {
+  background-color: #60a5fa;
+  color: #071A2F;
+}
+
+/* Lightbox overlay */
+.lightboxOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  cursor: pointer;
+}
+
+.lightboxImage {
+  max-width: 90vw;
+  max-height: 90vh;
+  object-fit: contain;
+  border-radius: 4px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.7);
+  cursor: default;
+}
+
+.lightboxClose {
+  position: absolute;
+  top: 20px;
+  right: 28px;
+  background: none;
+  border: none;
+  color: #ffffff;
+  font-size: 2.5rem;
+  line-height: 1;
+  cursor: pointer;
+  opacity: 0.7;
+  transition: opacity 0.2s;
+}
+
+.lightboxClose:hover {
+  opacity: 1;
 }

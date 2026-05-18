@@ -264,19 +264,36 @@
 /* Card image */
 .cardImage {
   width: 100%;
-  height: 77%;
+  height: 72%;
   flex-shrink: 0;
   background-color: #b0bbc8;
   object-fit: cover;
+}
+
+.cardImageFull {
+  height: 100%;
 }
 
 /* Card text */
 .cardName {
   font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
   color: #60a5fa;
-  padding: 9% 0;
+  padding: 0 10px;
   margin: 0;
   text-align: center;
+  flex-shrink: 0;
+  height: 28%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardName span {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.3;
 }
 
 .cardNameCenter {

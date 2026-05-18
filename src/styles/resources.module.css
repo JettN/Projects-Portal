@@ -1,94 +1,93 @@
- .bodyBg {
-	background: #06182b;
-	color: #222;
-	font-family: sans-serif;
-	margin: 0;
+.container {
+  text-align: center;
+  padding: 2rem;
+  padding-top: calc(2rem + 100px);
+  background-color: #071A2F;
+  color: white;
+  font-family: 'Book Antiqua', Georgia, serif;
+  min-height: 100vh;
 }
 
- .headerBar {
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-	padding: 1em 2em 0 2em;
+.page_title {
+  color: white;
+  font-size: 65px;
+  margin: 2rem 0;
 }
 
- .logo {
-	height: 48px;
+.columns {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 3rem;
+  margin: 2rem auto;
+  max-width: 900px;
+  text-align: left;
 }
 
- .navLinks {
+.links_column {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  flex: 1;
 }
 
- .navLink {
-	color: #fff;
-	margin-right: 2em;
-	text-decoration: none;
+.resource_card {
+  background-color: rgba(96, 165, 250, 0.1);
+  border: 1px solid #60A5FA;
+  border-radius: 8px;
+  padding: 1.25rem 1.5rem;
 }
 
- .navLinkActive {
-	color: #a5cdf7;
+.resource_card_title {
+  color: #60A5FA;
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.75rem;
 }
 
- .mainContent {
-	max-width: 900px;
-	margin: 2em auto;
+.resource_link_item {
+  margin: 0.6rem 0;
 }
 
- .resourcesSection {
+.resource_link {
+  color: white;
+  text-decoration: none;
 }
 
- .resourcesTitle {
-	background: #a5cdf7;
-	text-align: center;
-	padding: 0.5em 0;
-	border-radius: 3px;
+.resource_link:hover {
+  color: #60A5FA;
 }
 
- .columns {
-	margin: 2em 0;
-	display: flex;
-	flex-direction: row;
-	justify-content: center;
-	align-items: flex-start;
-	gap: 3em;
+.resource_link_description {
+  color: #94A3B8;
+  font-size: 0.8rem;
+  margin: 0.15rem 0 0 0;
 }
 
- .linksColumn {
-	display: flex;
-	flex-direction: column;
-	gap: 2em;
+.contact_aside {
+  background-color: rgba(96, 165, 250, 0.1);
+  border: 1px solid #60A5FA;
+  border-radius: 8px;
+  padding: 1.5rem;
+  width: 240px;
+  text-align: center;
 }
 
- .resourceBox {
-	background: #d9d9d9;
-	width: 350px;
-	text-align: center;
-	border-radius: 3px;
-	padding: 1em 0;
+.contact_title {
+  color: #60A5FA;
+  font-size: 1.1rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
 }
 
- .contactAside {
-	background: #d9d9d9;
-	width: 250px;
-	text-align: center;
-	border-radius: 3px;
-	padding: 2em 0;
-	align-self: stretch;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+.contact_item {
+  display: block;
+  color: white;
+  text-decoration: none;
+  margin: 0.5rem 0;
 }
 
- .contactTitle {
-	color: #6ba6f7;
-	font-weight: bold;
-}
-
- .contactDetails {
-	color: #6ba6f7;
-	margin-top: 1em;
-}
-
- .resourceLabel {
-	color: #6ba6f7;
+.contact_item:hover {
+  color: #60A5FA;
 }
