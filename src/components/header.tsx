@@ -9,7 +9,7 @@ export default function Header() {
 
   return (
     <header style={{ 
-      padding: '1rem 2rem', 
+      padding: '0.5rem 2rem', 
       backdropFilter: 'blur(10px)', 
       backgroundColor: '#11192840',
       position: 'fixed',
@@ -17,7 +17,7 @@ export default function Header() {
       top: 0,
       zIndex: 10,
       fontFamily: 'var(--font-geist-sans)',
-      fontSize: '1.2rem',
+      fontSize: '1rem',
     }}>
       <nav style={{ 
         display: 'flex', 
@@ -28,8 +28,8 @@ export default function Header() {
           <Image 
             src="/hkn-logo.svg"
             alt="HKN Logo" 
-            width={70}
-            height={70}
+            width={48}
+            height={48}
           />
         </Link>
 

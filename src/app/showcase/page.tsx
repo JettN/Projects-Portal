@@ -112,10 +112,12 @@ export default async function ShowcasePage() {
           <h3 className={styles.title}>Last Year&#39;s Winner</h3>
           {winnerProject.map((project) => (
             <div key={project.slug} className={styles.project}>
-              <Image className={styles.image} 
-                src={project.preview_image} alt={project.title}
-                width={200} height={140}
-              />
+              <div className={styles.imageFrame}>
+                <Image className={styles.image} 
+                  src={project.preview_image} alt={project.title}
+                  width={220} height={160}
+                />
+              </div>
               <div className={styles.projectDetailsContainer}>
                 <h3 className={styles.projectTitle}>{project.title}</h3>
                 <p className={styles.projectDetails}>{project.description}</p>
@@ -161,10 +163,12 @@ export default async function ShowcasePage() {
           <div className={styles.projectsContainer}>
             {activeProjects.map((project) => (
               <div key={project.slug} className={styles.project}>
-                <Image className={styles.image} 
-                  src={project.preview_image} alt={project.title}
-                  width={200} height={140}
-                />
+                <div className={styles.imageFrame}>
+                  <Image className={styles.image} 
+                    src={project.preview_image} alt={project.title}
+                    width={220} height={160}
+                  />
+                </div>
                 <div className={styles.projectDetailsContainer}>
                   <h3 className={styles.projectTitle}>{project.title}</h3>
                   <p className={styles.projectDetails}>{project.description}</p>

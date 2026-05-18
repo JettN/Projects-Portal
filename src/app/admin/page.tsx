@@ -68,7 +68,7 @@ export default function AdminPage() {
                   name: "showcase",
                   fields: [
                     { label: "Showcase Description", name: "showcase_description", widget: "text" },
-                    { label: "Showcase Date (YYYY-MM-DDThh:mm:ss)", name: "date", widget: "datetime", date_format: true },
+                    { label: "Showcase Date", name: "date", widget: "datetime"},
                     { label: "Showcase Location", name: "location", widget: "string" },
                     { label: "Winner Blurb", name: "winner_blurb", widget: "text" },
                     { label: "Location Google Map Embed Link", name: "location_link", widget: "string" },
@@ -110,7 +110,6 @@ export default function AdminPage() {
                       label: "Featured Projects",
                       name: "featured_projects",
                       widget: "list",
-                      min: 5,
                       field: {
                         label: "Project",
                         name: "project",

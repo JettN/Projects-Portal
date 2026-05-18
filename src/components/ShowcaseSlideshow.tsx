@@ -31,25 +31,24 @@ export default function ShowcaseSlideshow({
   const [current, setCurrent] = useState(0);
 
   // Date formatting
-  // Parse the date as Pacific Time by using Intl to get the correct UTC offset.
-  // Strip any existing timezone info and reinterpret as America/Los_Angeles.
+  // The markdown stores the date as a naive string in Pacific Time (no tz suffix).
+  // We determine the correct PT UTC offset (PDT = -07:00, PST = -08:00) for that
+  // specific moment using Intl, then reparse with the offset appended so JavaScript
+  // treats it as the right absolute UTC instant regardless of the user's local timezone.
   const parseDateAsPacific = (dateStr: string): Date => {
-    // Remove any trailing Z or offset so we treat it as a naive local string
     const naive = dateStr.replace(/Z|[+-]\d{2}:\d{2}$/, '');
-    // Use Intl to find the UTC offset for Pacific Time at that moment
-    const tempDate = new Date(naive + 'Z'); // parse as UTC first to get a Date
-    const pacificFormatter = new Intl.DateTimeFormat('en-US', {
+    // Probe with UTC to get a Date we can query Intl against
+    const probe = new Date(naive + 'Z');
+    // Extract the GMT offset string (e.g. "GMT-7" or "GMT-8") for America/Los_Angeles
+    const ptFormatter = new Intl.DateTimeFormat('en-US', {
       timeZone: 'America/Los_Angeles',
-      year: 'numeric', month: '2-digit', day: '2-digit',
-      hour: '2-digit', minute: '2-digit', second: '2-digit',
-      hour12: false,
+      timeZoneName: 'shortOffset',
     });
-    // Re-parse using the naive string interpreted in PT by finding the offset
-    const parts = pacificFormatter.formatToParts(tempDate);
-    const get = (type: string) => parts.find(p => p.type === type)?.value ?? '0';
-    const ptNow = new Date(`${get('year')}-${get('month')}-${get('day')}T${get('hour') === '24' ? '00' : get('hour')}:${get('minute')}:${get('second')}Z`);
-    const offsetMs = tempDate.getTime() - ptNow.getTime();
-    return new Date(new Date(naive).getTime() - offsetMs);
+    const offsetMatch = ptFormatter.format(probe).match(/GMT([+-]\d+)/);
+    const offsetHours = offsetMatch ? parseInt(offsetMatch[1], 10) : -7;
+    const sign = offsetHours >= 0 ? '+' : '-';
+    const pad = Math.abs(offsetHours).toString().padStart(2, '0');
+    return new Date(`${naive}${sign}${pad}:00`);
   };
 
   const eventDate = parseDateAsPacific(date);  
