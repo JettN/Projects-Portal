@@ -1,17 +1,18 @@
-import styles from "../../../styles/single.project.module.css";
 import fs from "fs";
 import matter from "gray-matter";
 import path from "path";
 import { notFound } from "next/navigation";
-import FeaturedCarousel, {
-  type FeaturedCarouselCard,
-} from "../../../components/FeaturedCarousel";
+import { type FeaturedCarouselCard } from "../../../components/FeaturedCarousel";
+import ProjectEntryClient from "./ProjectEntryClient";
 
 interface ProjectFrontmatter {
   title?: string;
   team?: string[];
+  team_leader?: string;
+  team_photo?: string;
   preview_image?: string;
   carousel_images?: unknown;
+  doc_link?: string;
 }
 
 function docCarouselCards(
@@ -37,17 +38,6 @@ function docCarouselCards(
   }));
 }
 
-/** Demo: repeat the same image set twice more so arrow clicks show more slides. */
-function triplicateCarouselCards(
-  cards: FeaturedCarouselCard[]
-): FeaturedCarouselCard[] {
-  if (cards.length === 0) return cards;
-  return [...cards, ...cards, ...cards].map((card, index) => ({
-    ...card,
-    id: index,
-  }));
-}
-
 export default async function Entry({
   params,
 }: {
@@ -68,66 +58,13 @@ export default async function Entry({
   const fileContent = fs.readFileSync(projectPath, "utf-8");
   const { data, content } = matter(fileContent);
   const frontmatter = data as ProjectFrontmatter;
-  const testCards = triplicateCarouselCards(docCarouselCards(slug, frontmatter));
-  const backgroundImage = testCards[0]?.image;
+  const carouselCards = docCarouselCards(slug, frontmatter);
 
   return (
-    <main className={styles.page}>
-      {backgroundImage ? (
-        <div
-          className={styles.pageBackground}
-          style={{ backgroundImage: `url(${backgroundImage})` }}
-          aria-hidden="true"
-        />
-      ) : null}
-      <div className={styles.container}>
-        <h1 className={styles.mainTitle}>
-          {frontmatter.title || "Project Name"}
-        </h1>
-
-        <section>
-          <h2 className={styles.sectionTitle}>Project Overview</h2>
-          <div className={styles.overviewBox}>
-            <p>{content}</p>
-          </div>
-        </section>
-
-        <section>
-          <h2 className={styles.sectionTitle}>Documentation</h2>
-          {testCards.length > 0 ? (
-            <FeaturedCarousel cards={testCards} />
-          ) : (
-            <p style={{ opacity: 0.85 }}>No preview images for this project.</p>
-          )}
-        </section>
-
-        <section>
-          <h2 className={styles.sectionTitle}>Project Members</h2>
-          <div className={styles.membersContent}>
-            <div
-              className={styles.memberPhoto}
-              style={
-                frontmatter.preview_image
-                  ? {
-                      backgroundImage: `url(${frontmatter.preview_image})`,
-                    }
-                  : undefined
-              }
-            />
-
-            <div className={styles.memberList}>
-              <h3>Team:</h3>
-              {frontmatter.team?.length ? (
-                frontmatter.team.map((member, index) => (
-                  <p key={index}>{member}</p>
-                ))
-              ) : (
-                <p>No members listed.</p>
-              )}
-            </div>
-          </div>
-        </section>
-      </div>
-    </main>
+    <ProjectEntryClient
+      frontmatter={frontmatter}
+      content={content}
+      carouselCards={carouselCards}
+    />
   );
 }

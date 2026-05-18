@@ -12,11 +12,11 @@ export default function Header() {
       padding: '1rem 2rem', 
       backdropFilter: 'blur(10px)', 
       backgroundColor: '#11192840',
-      position: 'sticky',
+      position: 'fixed',
       width: '100%',
       top: 0,
       zIndex: 10,
-      fontFamily: 'var(--font-geist-sans)',  // matches the rest of the site
+      fontFamily: 'var(--font-geist-sans)',
       fontSize: '1.2rem',
     }}>
       <nav style={{ 
@@ -35,6 +35,7 @@ export default function Header() {
 
         {/* Navigation Links Section */}
         <div style={{ display: 'flex', gap: '20px' }}>
+          <Link href="/" style={{ color: pathname === '/' ? '#5f69a6' : '#bfdbfee6', textDecoration: 'none' }}>Home</Link>
           <Link href="/projects" style={{ color: pathname === '/projects' ? '#5f69a6' : '#bfdbfee6', textDecoration: 'none' }}>All Projects</Link>
           <Link href="/resources" style={{ color: pathname === '/resources' ? '#5f69a6' : '#bfdbfee6', textDecoration: 'none' }}>Resources</Link>
           <Link href="/showcase" style={{ color: pathname === '/showcase' ? '#5f69a6' : '#bfdbfee6', textDecoration: 'none' }}>Showcase</Link>

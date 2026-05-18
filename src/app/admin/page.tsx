@@ -25,6 +25,8 @@ export default function AdminPage() {
           },
           local_backend: false,
           load_config_file: false,
+          show_preview_links: false,
+          editor: { preview: false },
           media_folder: '/public/images',
           public_folder: '/images',
           collections: [
@@ -68,6 +70,8 @@ export default function AdminPage() {
                   label: "Home Page Featured Carousel",
                   name: "homepage",
                   fields: [
+                    { label: "About Subtitle", name: "about_subtitle", widget: "string", hint: "Heading under 'What is HKN Projects?'" },
+                    { label: "About Body", name: "about_body", widget: "text", hint: "Paragraph text under the subtitle" },
                     {
                       label: "Featured Projects",
                       name: "featured_projects",
@@ -129,10 +133,20 @@ export default function AdminPage() {
               fields: [
                 { label: "Project Title", name: "title", widget: "string" },
                 { label: "Detailed Description", name: "body", widget: "markdown" },
-                { label: "Team Members", name: "team", widget: "list" },
+                { label: "Documentation Link", name: "doc_link", widget: "string", hint: "URL to the project's documentation page (shown above the image carousel)", required: false },
+                { label: "Team Leader", name: "team_leader", widget: "string", hint: "Full name of the team leader (first and last name)", required: false },
+                { label: "Team Members", name: "team", widget: "list", field: { label: "Member Name", name: "member", widget: "string", hint: "Enter first and last name" } },
                 { label: "Project Start Date", name: "start_date", widget: "datetime" },
                 { label: "Project Type", name: "type", widget: "select", options: ["Computer Science", "Data Science", "Electrical", "Mechanical", "Other"] },
-                { label: "Preview Image", name: "preview_image", widget: "image", media_folder: "/public/images/projects",     public_folder: "/images/projects" },
+                { label: "Team Photo", name: "team_photo", widget: "image", media_folder: "/public/images/projects", public_folder: "/images/projects", hint: "Group photo displayed in the Project Members section", required: false },
+                { label: "Preview Image", name: "preview_image", widget: "image", media_folder: "/public/images/projects", public_folder: "/images/projects", hint: "Thumbnail shown on the projects listing page" },
+                {
+                  label: "Carousel Images",
+                  name: "carousel_images",
+                  widget: "list",
+                  hint: "Add as many documentation/project images as you want — these will appear in the carousel slideshow",
+                  field: { label: "Image", name: "image", widget: "image", media_folder: "/public/images/projects", public_folder: "/images/projects" }
+                },
                 { label: "Status", name: "status", widget: "select", options: ["active", "past"]},
                 { label: "Status", name: "winner_status", widget: "select", options: ["winner", "not winner"]},
                 { label: "Keywords", name: "keywords", widget: "list"}

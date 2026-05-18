@@ -1,6 +1,7 @@
 .container {
   text-align: center;
   padding: 2rem;
+  padding-top: calc(2rem + 100px);
   background-color: #071A2F;
   color: white;
   font-family: 'Book Antiqua', Georgia, serif;
@@ -40,7 +41,7 @@
 
 .resource_card_title {
   color: #60A5FA;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   font-weight: bold;
   margin-bottom: 0.75rem;
 }

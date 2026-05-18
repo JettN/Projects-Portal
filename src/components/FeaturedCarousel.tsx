@@ -28,10 +28,11 @@ function getOffset(idx: number, center: number, count: number): number {
 // Carousel component props
 interface FeaturedCarouselProps {
   cards: FeaturedCarouselCard[];
+  onExpandImage?: (src: string) => void;
 }
 
 // Carousel component
-export default function FeaturedCarousel({ cards }: FeaturedCarouselProps) {
+export default function FeaturedCarousel({ cards, onExpandImage }: FeaturedCarouselProps) {
   const count = cards.length; // Number of cards in the carousel
   // Index of the currently centered card
   const [centerIdx, setCenterIdx] = useState(0);
@@ -143,38 +144,52 @@ export default function FeaturedCarousel({ cards }: FeaturedCarouselProps) {
                 }}
               >
                 {isCenter ? (
-                  <Link
-                    href={`/projects/${card.slug}`}
-                    className={styles.carouselCardLink}
-                    aria-label={`View ${card.name}`}
-                    aria-disabled={!centerLinkEnabled}
-                    tabIndex={centerLinkEnabled ? 0 : -1}
-                    onClick={centerLinkEnabled ? undefined : (event) => event.preventDefault()}
-                    style={centerLinkEnabled ? undefined : { pointerEvents: "none" }}
-                  >
-                    {/* Card image */}
-                    <img
-                      src={card.image}
-                      alt={card.name}
-                      className={styles.cardImage}
-                    />
-                    {/* Project Title */}
-                    <p className={`${styles.cardName} ${styles.cardNameCenter}`}>
-                      {card.name}
-                    </p>
-                  </Link>
+                  onExpandImage ? (
+                    // On project slug pages: clicking expands the image
+                    <div
+                      className={styles.carouselCardLink}
+                      onClick={() => onExpandImage(card.image)}
+                      style={{ cursor: "zoom-in" }}
+                    >
+                      <img
+                        src={card.image}
+                        alt={card.name}
+                        className={`${styles.cardImage} ${styles.cardImageFull}`}
+                      />
+                    </div>
+                  ) : (
+                    // On home page: clicking navigates to the project
+                    <Link
+                      href={`/projects/${card.slug}`}
+                      className={styles.carouselCardLink}
+                      aria-label={`View ${card.name}`}
+                      aria-disabled={!centerLinkEnabled}
+                      tabIndex={centerLinkEnabled ? 0 : -1}
+                      onClick={centerLinkEnabled ? undefined : (event) => event.preventDefault()}
+                      style={centerLinkEnabled ? undefined : { pointerEvents: "none" }}
+                    >
+                      <img
+                        src={card.image}
+                        alt={card.name}
+                        className={styles.cardImage}
+                      />
+                      <p className={`${styles.cardName} ${styles.cardNameCenter}`}>
+                        <span>{card.name}</span>
+                      </p>
+                    </Link>
+                  )
                 ) : (
                   <div className={styles.carouselCardLink} onClick={isVisible ? () => goToIndex(idx) : undefined}>
-                    {/* Card image */}
                     <img
                       src={card.image}
                       alt={card.name}
-                      className={styles.cardImage}
+                      className={`${styles.cardImage}${onExpandImage ? ` ${styles.cardImageFull}` : ''}`}
                     />
-                    {/* Project Title */}
-                    <p className={styles.cardName}>
-                      {card.name}
-                    </p>
+                    {!onExpandImage && (
+                      <p className={styles.cardName}>
+                        <span>{card.name}</span>
+                      </p>
+                    )}
                   </div>
                 )}
               </div>
@@ -197,4 +212,3 @@ export default function FeaturedCarousel({ cards }: FeaturedCarouselProps) {
     </div>
   );
 }
-

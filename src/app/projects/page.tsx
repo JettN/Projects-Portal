@@ -8,6 +8,7 @@ interface Project {
   title: string;
   preview_image: string;
   team: string[];
+  team_leader?: string;
   start_date: string;
   type: string;
   status: 'active' | 'planned' | 'past';
@@ -42,6 +43,7 @@ async function getProjects(): Promise<Project[]> {
       title: data.title,
       preview_image: data.preview_image,
       team: data.team,
+      team_leader: data.team_leader,
       start_date: data.start_date,
       type: data.type,
       status: data.status,

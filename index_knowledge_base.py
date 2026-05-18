@@ -4,8 +4,9 @@ index_knowledge_base.py
 Run this script ONCE (or whenever content changes) to populate Pinecone.
 
 Install dependencies:
-    pip install llama-index llama-index-vector-stores-pinecone
-                llama-index-embeddings-google-genai
+    pip install llama-index llama-index-vector-stores-pinecone \
+                llama-index-embeddings-google-genai \
+                llama-index-readers-google \
                 pinecone-client python-dotenv google-genai requests
 """
 
@@ -21,11 +22,18 @@ from llama_index.vector_stores.pinecone import PineconeVectorStore
 from llama_index.core.node_parser import SentenceSplitter
 
 # ── Embedding setup ───────────────────────────────────────────────────────────
+import time
 from llama_index.embeddings.google_genai import GoogleGenAIEmbedding
 
-embed_model = GoogleGenAIEmbedding(
+class StrictRateLimitedGoogleEmbedding(GoogleGenAIEmbedding):
+    def _get_text_embeddings(self, texts: list[str]) -> list[list[float]]:
+        time.sleep(4)  # increase from 1.5s
+        return super()._get_text_embeddings(texts)
+
+embed_model = StrictRateLimitedGoogleEmbedding(
     model_name="gemini-embedding-2",
     api_key=os.getenv("GEMINI_API_KEY"),
+    embed_batch_size=5,  # reduce from 10
 )
 
 Settings.embed_model = embed_model
@@ -84,10 +92,39 @@ except Exception as e:
 
 
 # ══════════════════════════════════════════════════════════════════════════════
-# SECTION 2 — Google Drive (disabled — requires service account credentials)
+# SECTION 2 — Google Drive (Service Account Reader)
 # ══════════════════════════════════════════════════════════════════════════════
 drive_docs = []
-print("⚠ Google Drive: skipped (disabled)")
+try:
+    from llama_index.readers.google import GoogleDriveReader
+    
+    # Path to your downloaded service account key JSON file
+    SERVICE_ACCOUNT_KEY_PATH = "credentials.json"
+    GOOGLE_DRIVE_FOLDER_ID = os.getenv("GOOGLE_DRIVE_FOLDER_ID") # Add to .env file
+    
+    if not GOOGLE_DRIVE_FOLDER_ID:
+        print("⚠ Google Drive: GOOGLE_DRIVE_FOLDER_ID env variable not set. Skipping.")
+    elif not os.path.exists(SERVICE_ACCOUNT_KEY_PATH):
+        print(f"⚠ Google Drive: '{SERVICE_ACCOUNT_KEY_PATH}' not found in root. Skipping.")
+    else:
+        # Initialize GoogleDriveReader with Service Account config
+        drive_reader = GoogleDriveReader(
+            service_account_key_path=SERVICE_ACCOUNT_KEY_PATH
+        )
+        
+        print(f"⏳ Google Drive: Fetching documents from folder ID '{GOOGLE_DRIVE_FOLDER_ID}'...")
+        # Loads docs from the target folder, parsing PDFs, Docs, Sheets, etc.
+        drive_docs = drive_reader.load_data(folder_id=GOOGLE_DRIVE_FOLDER_ID)
+        
+        # Inject custom tracking metadata
+        for doc in drive_docs:
+            doc.metadata["source"] = "google_drive"
+            if "file_name" not in doc.metadata and "name" in doc.metadata:
+                doc.metadata["file_name"] = doc.metadata["name"]
+                
+        print(f"✅ Google Drive: loaded {len(drive_docs)} documents")
+except Exception as e:
+    print(f"❌ Google Drive error: {e}")
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -143,10 +180,26 @@ pinecone_index = pc.Index(index_name)
 vector_store = PineconeVectorStore(pinecone_index=pinecone_index)
 storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
+MAX_CHUNKS_PER_DOC = 75
+
+from llama_index.core.node_parser import SentenceSplitter
+splitter = SentenceSplitter(chunk_size=512, chunk_overlap=50)
+
+all_nodes = []
+for doc in all_docs:
+    nodes = splitter.get_nodes_from_documents([doc])
+    original = len(nodes)
+    if len(nodes) > MAX_CHUNKS_PER_DOC:
+        nodes = nodes[:MAX_CHUNKS_PER_DOC]
+        print(f"  Trimmed {doc.metadata.get('source','?')}: {original} → {len(nodes)} chunks")
+    all_nodes.extend(nodes)
+
+print(f"Total chunks after trimming: {len(all_nodes)}")
+
 print("\n⏳ Embedding and indexing — this may take a minute...")
 
 VectorStoreIndex.from_documents(
-    all_docs,
+    all_nodes,
     storage_context=storage_context,
     transformations=[SentenceSplitter(chunk_size=512, chunk_overlap=50)],
     show_progress=True,

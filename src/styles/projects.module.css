@@ -1,6 +1,7 @@
 .container {
   text-align: center;
   padding: 2rem;
+  padding-top: calc(2rem + 100px);
   background-color: #071A2F;
   color: white;
   font-family: 'Book Antiqua', Georgia, serif;
@@ -72,9 +73,25 @@
     margin: 1.5rem auto
 }
 
-.search_input {
+.search_input_wrapper {
     flex: 1;
-    padding: 0.5rem 1rem;
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search_icon {
+    position: absolute;
+    left: 0.75rem;
+    color: #94A3B8;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+}
+
+.search_input {
+    width: 100%;
+    padding: 0.5rem 1rem 0.5rem 2.25rem;
     font-size: 0.875rem;
     border: 2px solid #60A5FA;
     border-radius: 8px;
@@ -110,4 +127,17 @@
 
 .search_button:hover {
     background-color: #93C5FD;
+}
+
+.card_team {
+  font-size: 0.8rem;
+  color: #444;
+  margin: 4px 0 0 0;
+  line-height: 1.4;
+}
+
+.no_results {
+  color: #94A3B8;
+  text-align: center;
+  margin: 2rem 0;
 }

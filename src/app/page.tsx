@@ -12,6 +12,8 @@ type FeaturedProjectEntry = string | { project?: string };
 
 interface HomeFrontmatter {
   featured_projects?: FeaturedProjectEntry[];
+  about_subtitle?: string;
+  about_body?: string;
 }
 
 // Normalize project slugs by removing .md extension, /index suffix, and converting backslashes to forward slashes
@@ -79,9 +81,25 @@ async function getFeaturedProjects(): Promise<FeaturedCarouselCard[]> {
   return cards;
 }
 
+async function getHomeContent(): Promise<{ about_subtitle: string; about_body: string }> {
+  const homeConfigPath = path.join(process.cwd(), "content/home/homepage.md");
+  if (!fs.existsSync(homeConfigPath)) {
+    return { about_subtitle: "", about_body: "" };
+  }
+  const { data } = matter(fs.readFileSync(homeConfigPath, "utf-8"));
+  const frontmatter = data as HomeFrontmatter;
+  return {
+    about_subtitle: frontmatter.about_subtitle ?? "",
+    about_body: frontmatter.about_body ?? "",
+  };
+}
+
 // Home Page
 export default async function Home() {
-  const featuredProjects = await getFeaturedProjects(); // Fetch the featured projects to display in the carousel
+  const [featuredProjects, homeContent] = await Promise.all([
+    getFeaturedProjects(),
+    getHomeContent(),
+  ]);
 
   return (
     <div className={styles.page}>
@@ -102,22 +120,10 @@ export default async function Home() {
             {/* Section text */}
             <div className={styles.aboutTextWrapper}>
               <h3 className={styles.aboutHeading}>
-                Hands-On Engineering Experience
+                {homeContent.about_subtitle || "Hands-On Engineering Experience"}
               </h3>
               <p className={styles.aboutBody}>
-                Body text for your whole article or post. We&apos;ll put in some
-                lorem ipsum to show how a filled-out page might look:
-              </p>
-              <p className={styles.aboutBody}>
-                Excepteur efficient emerging, minim veniam anim aute carefully
-                curated Ginza conversation exquisite perfect nostrud nisi
-                intricate Content. Qui  international first-class nulla ut.
-                Punctual adipisicing, essential lovely queen tempor eiusmod
-                irure. Exclusive izakaya charming Scandinavian impeccable aute
-                quality of life soft power pariatur Melbourne occaecat
-                discerning. Qui wardrobe aliquip, et Porter destination Toto
-                remarkable officia Helsinki excepteur Basset hound. Zürich
-                sleepy perfect consectetur.
+                {homeContent.about_body || ""}
               </p>
             </div>
           </div>

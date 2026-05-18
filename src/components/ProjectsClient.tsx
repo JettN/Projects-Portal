@@ -8,6 +8,7 @@ interface Project {
   title: string;
   preview_image: string;
   team: string[];
+  team_leader?: string;
   start_date: string;
   type: string;
   status: 'active' | 'planned' | 'past';
@@ -26,17 +27,31 @@ function ProjectGrid({ projects }: { projects: Project[] }) {
 
   return (
     <ul className={styles.grid}>
-      {projects.map((project) => (
-        <li key={project.slug}>
-          <Link href={`/projects/${project.slug}`}>
-            <article className={styles.card}>
-              <img src={project.preview_image} alt={project.title} />
-              <h3>{project.title}</h3>
-              <p>{project.team?.join(', ')}</p>
-            </article>
-          </Link>
-        </li>
-      ))}
+      {projects.map((project) => {
+        const otherMembers = project.team?.filter(
+          (m) => m !== project.team_leader
+        ) ?? [];
+
+        return (
+          <li key={project.slug}>
+            <Link href={`/projects/${project.slug}`}>
+              <article className={styles.card}>
+                <img src={project.preview_image} alt={project.title} />
+                <h3>{project.title}</h3>
+                <p className={styles.card_team}>
+                  {project.team_leader && (
+                    <span>
+                      {project.team_leader} (Team Lead)
+                    </span>
+                  )}
+                  {project.team_leader && otherMembers.length > 0 && ', '}
+                  {otherMembers.join(', ')}
+                </p>
+              </article>
+            </Link>
+          </li>
+        );
+      })}
     </ul>
   );
 }
@@ -64,15 +79,23 @@ export default function ProjectsClient({ projects }: ProjectsClientProps) {
   return (
     <>
       <section className={styles.search_section}>
-        <input
-          type="search"
-          name="q"
-          placeholder="Search by title, keyword, type, or team member…"
-          className={styles.search_input}
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          aria-label="Search projects"
-        />
+        <div className={styles.search_input_wrapper}>
+          <span className={styles.search_icon}>
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="11" cy="11" r="8" />
+              <line x1="21" y1="21" x2="16.65" y2="16.65" />
+            </svg>
+          </span>
+          <input
+            type="search"
+            name="q"
+            placeholder="Search by title, keyword, type, or team member…"
+            className={styles.search_input}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            aria-label="Search projects"
+          />
+        </div>
         {query && (
           <button
             className={styles.search_clear}
