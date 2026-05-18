@@ -5,7 +5,7 @@ team:
   - Joaquin Ruiz
   - Kibum Kim
 start_date: 2026-02-02T19:30:00.000-08:00
-type: Mechanical
+type: Mechanical Engineering, Electrical Engineering
 featured: true
 preview_image: /images/projects/screenshot-2026-05-12-at-4.14.25 pm.png
 carousel_images:
