@@ -31,7 +31,7 @@ export default function ShowcaseSlideshow({
   const [current, setCurrent] = useState(0);
 
   // Date formatting
-  const eventDate = new Date(date);  
+  const eventDate = new Date(date.replaceAll("/", "-"));  
   // Formats to "MM/DD/YYYY"
   const formattedDate = eventDate.toLocaleDateString("en-US", {
     month: "2-digit",
@@ -47,7 +47,7 @@ export default function ShowcaseSlideshow({
 
   // Countdown calculation
   const calculateTimeLeft = (): TimeLeft => {
-    const difference = +new Date(date) - +new Date();
+    const difference = +new Date(date.replaceAll("/", "-")) - +new Date();
     if (difference > 0) {
       return {
         days: Math.floor(difference / (1000 * 60 * 60 * 24)),
