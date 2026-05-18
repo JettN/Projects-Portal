@@ -19,9 +19,18 @@
 .mainTitle {
   font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
   text-align: center;
-  margin-bottom: 60px;
+  margin-bottom: 8px;
   font-size: 65px;
   letter-spacing: 1px;
+}
+
+.projectDateline {
+  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
+  text-align: center;
+  color: #60a5fa;
+  font-size: 1rem;
+  opacity: 0.85;
+  margin: 0 0 52px 0;
 }
 
 .sectionTitle {
@@ -186,18 +195,6 @@
   margin: 25px 0 5px 0;
   font-size: 1.1rem;
   font-weight: 500;
-}
-
-.projectMeta {
-  margin-bottom: 16px;
-}
-
-.metaItem {
-  font-family: "Book Antiqua", Georgia, "Times New Roman", serif;
-  color: #60a5fa;
-  font-size: 0.9rem;
-  margin: 2px 0;
-  opacity: 0.85;
 }
 
 .teamLeader {

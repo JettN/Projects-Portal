@@ -43,6 +43,16 @@ export default function ProjectEntryClient({ frontmatter, content, carouselCards
           {frontmatter.title || "Project Name"}
         </h1>
 
+        {/* Date range under title */}
+        {frontmatter.start_date && (
+          <p className={styles.projectDateline}>
+            {new Date(frontmatter.start_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+            {frontmatter.end_date
+              ? ` – ${new Date(frontmatter.end_date).toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}`
+              : ' – Present'}
+          </p>
+        )}
+
         <section>
           <h2 className={styles.sectionTitle}>Project Overview</h2>
           <div className={styles.overviewBox}>
@@ -92,22 +102,6 @@ export default function ProjectEntryClient({ frontmatter, content, carouselCards
             />
 
             <div className={styles.memberList}>
-              {(frontmatter.start_date || frontmatter.type) && (
-                <div className={styles.projectMeta}>
-                  {frontmatter.type && (
-                    <p className={styles.metaItem}>{frontmatter.type}</p>
-                  )}
-                  {frontmatter.start_date && (
-                    <p className={styles.metaItem}>
-                      {new Date(frontmatter.start_date).getFullYear()}
-                      {frontmatter.end_date
-                        ? ` – ${new Date(frontmatter.end_date).getFullYear()}`
-                        : ' – Present'}
-                    </p>
-                  )}
-                </div>
-              )}
-
               {frontmatter.team_leader && (
                 <>
                   <h3>Team Leader:</h3>
@@ -122,6 +116,13 @@ export default function ProjectEntryClient({ frontmatter, content, carouselCards
                 ))
               ) : (
                 <p>No members listed.</p>
+              )}
+
+              {frontmatter.type && (
+                <>
+                  <h3>Majors Involved:</h3>
+                  <p>{frontmatter.type}</p>
+                </>
               )}
             </div>
           </div>
