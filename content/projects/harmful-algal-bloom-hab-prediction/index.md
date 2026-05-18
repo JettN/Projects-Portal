@@ -11,7 +11,7 @@ team:
   - Oscar Khaing
   - Ryan Chen
 start_date: 2025-01-28T19:30:00.000-08:00
-type: Data Science
+type: Data Science, Math-CS, Computer Science
 featured: true
 team_photo: /images/projects/hab_and_dev_team_photo.jpg
 preview_image: /images/projects/bioluminescence.png
