@@ -8,7 +8,7 @@ team:
 start_date: 2026-03-05
 end_date: 2026-05-17
 type: Computer Science
-featured: true
+featured: false
 team_photo: /images/northrop-grumman-vector-logo.png
 preview_image: /images/projects/screenshot-2026-05-12-at-4.15.06 pm.png
 carousel_images:
