@@ -21,8 +21,6 @@ featured_projects:
   - harmful-algal-bloom-hab-prediction/index
   - macropad/index
   - thermoacoustic-refrigerator-tar/index
-  - harmful-algal-bloom-hab-prediction/index
-  - macropad/index
 ---
 Use this file to control the homepage featured carousel.
 Pick 5 or more projects in the CMS and reorder them to control carousel order.
